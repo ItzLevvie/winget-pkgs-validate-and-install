@@ -2,13 +2,13 @@
 
 :1
 cls
-set PULL_REQUEST_NUMBER=
-set /p PULL_REQUEST_NUMBER="Please enter the pull request number: "
-if "%PULL_REQUEST_NUMBER%" == "" goto :1
+set PR_NUMBER=
+set /p PR_NUMBER="Please enter the pull request number: "
+if "%PR_NUMBER%" == "" goto :1
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
-git fetch --force upstream refs/pull/%NUMBER%/head:pull/%PULL_REQUEST_NUMBER%
-git checkout --force pull/%PULL_REQUEST_NUMBER%
-git diff --name-only upstream/master...pull/%PULL_REQUEST_NUMBER%
+git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER%
+git checkout --force pull/%PR_NUMBER%
+git diff --name-only upstream/master...pull/%PR_NUMBER%
 goto :2
 
 :2
@@ -18,6 +18,6 @@ if "%FOLDER_PATH%" == "" goto :2
 winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 git checkout --detach --force upstream/master
-git branch --delete --force pull/%PULL_REQUEST_NUMBER%
+git branch --delete --force pull/%PR_NUMBER%
 pause
 goto :1
