@@ -1,5 +1,6 @@
 @echo off
 
+cls
 git clone --depth 1 https://github.com/microsoft/winget-pkgs.git
 
 :1
