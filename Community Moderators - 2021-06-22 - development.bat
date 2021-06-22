@@ -12,11 +12,11 @@ git diff --name-only upstream/master...pull/%PULL_REQUEST_NUMBER%
 goto :2
 
 :2
-set PATH=
-set /p PATH="Please enter the path to the folder where the manifest file(s) is (are) located: "
-if "%PATH%" == "" goto :2
-winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%PATH%"
-winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%PATH%"
+set FOLDER_PATH=
+set /p FOLDER_PATH="Please enter the path to the folder where the manifest file(s) is (are) located: "
+if "%FOLDER_PATH%" == "" goto :2
+winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
+winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 git checkout --detach --force upstream/master
 git branch --delete --force pull/%PULL_REQUEST_NUMBER%
 pause
