@@ -9,6 +9,7 @@ if "%PR_NUMBER%" == "" goto :1
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git fetch --force upstream master > nul 2>&1
 git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER%
+if "%ERRORLEVEL%" == "128" goto :1
 git checkout --force pull/%PR_NUMBER%
 git diff --name-status --no-renames --diff-filter=AM upstream/master...pull/%PR_NUMBER%
 cd "C:/Users/%USERNAME%/Desktop"
