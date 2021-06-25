@@ -1,7 +1,8 @@
 @echo off
 
-:1
 cls
+
+:1
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :1
