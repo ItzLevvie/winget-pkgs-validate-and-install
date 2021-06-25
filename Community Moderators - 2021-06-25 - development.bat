@@ -10,6 +10,7 @@ git fetch --force upstream master > nul 2>&1
 git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER%
 git checkout --force pull/%PR_NUMBER%
 git diff --summary --no-renames upstream/master...pull/%PR_NUMBER%
+cd "C:/Users/%USERNAME%/Desktop"
 goto :2
 
 :2
@@ -18,6 +19,7 @@ set /p FOLDER_PATH="Please enter the path to the folder where the manifest file(
 if "%FOLDER_PATH%" == "" goto :2
 winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
+cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git checkout --detach --force upstream/master
 git branch --delete --force pull/%PR_NUMBER%
 pause
