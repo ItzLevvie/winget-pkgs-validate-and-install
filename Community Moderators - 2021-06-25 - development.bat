@@ -25,4 +25,5 @@ cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git checkout --detach --force upstream/master
 git branch --delete --force pull/%PR_NUMBER%
 pause
+cls
 goto :1
