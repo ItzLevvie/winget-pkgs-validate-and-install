@@ -18,6 +18,7 @@ set FOLDER_PATH=
 set /p FOLDER_PATH="Please enter the path to the folder where the manifest file(s) is (are) located: "
 if "%FOLDER_PATH%" == "" goto :2
 winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
+if "%ERRORLEVEL%" == "-2147024893" goto :2
 winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git checkout --detach --force upstream/master
