@@ -7,7 +7,7 @@ if %ERRORLEVEL% == 1 (
     echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist.
     goto :EOF
 )
-git > nul 2>&1
+git --version > nul 2>&1
 if %ERRORLEVEL% == 9009 (
     echo Git is not installed.
     goto :EOF
