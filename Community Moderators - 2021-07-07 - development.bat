@@ -34,7 +34,7 @@ winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FO
 if %ERRORLEVEL% == -2147024893 goto :2
 winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
-git checkout --detach --force upstream/master > nul 2>&1
+git checkout --detach upstream/master > nul 2>&1
 git branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
 cls
