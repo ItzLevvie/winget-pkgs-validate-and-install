@@ -3,10 +3,14 @@
 cls
 
 :1
+cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" > nul 2>&1
+if %ERRORLEVEL% == 1 (
+    echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist on your device.
+    goto :EOF
+)
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :1
-cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git fetch --force upstream master > nul 2>&1
 git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER%
 if "%ERRORLEVEL%" == "128" goto :1
