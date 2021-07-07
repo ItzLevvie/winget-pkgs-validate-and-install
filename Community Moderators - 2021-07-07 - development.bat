@@ -8,6 +8,11 @@ if %ERRORLEVEL% == 1 (
     echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist on your device.
     goto :EOF
 )
+git > nul 2>&1
+if %ERRORLEVEL% == 9009 (
+    echo Git is not installed on your device.
+    goto :EOF
+)
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :1
