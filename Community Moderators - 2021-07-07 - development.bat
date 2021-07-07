@@ -22,7 +22,7 @@ if %ERRORLEVEL% == 128 (
     goto :1
 )
 git checkout pull/%PR_NUMBER% > nul 2>&1
-git diff --raw --no-renames --diff-filter=dr upstream/master...pull/%PR_NUMBER%
+git diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%
 goto :2
 
 :2
