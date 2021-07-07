@@ -27,12 +27,12 @@ goto :2
 
 :2
 cd "C:/Users/%USERNAME%/Desktop"
-set FOLDER_PATH=
-set /p FOLDER_PATH="Please enter the path to the folder where the manifest file(s) is (are) located: "
-if "%FOLDER_PATH%" == "" goto :2
-winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
+set DIRECTORY_PATH=
+set /p DIRECTORY_PATH="Please enter the directory path to the manifest: "
+if "%DIRECTORY_PATH%" == "" goto :2
+winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%DIRECTORY_PATH%"
 if %ERRORLEVEL% == -2147024893 goto :2
-winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOLDER_PATH%"
+winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%DIRECTORY_PATH%"
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git checkout --detach upstream/master > nul 2>&1
 git branch --delete --force pull/%PR_NUMBER% > nul 2>&1
