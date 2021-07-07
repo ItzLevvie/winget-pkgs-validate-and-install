@@ -14,7 +14,7 @@ if %ERRORLEVEL% == 9009 (
 )
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
-if %PR_NUMBER% == "" goto :1
+if "%PR_NUMBER%" == "" goto :1
 git fetch --force upstream master > nul 2>&1
 git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% == 128 (
