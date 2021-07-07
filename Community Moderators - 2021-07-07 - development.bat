@@ -25,6 +25,7 @@ git fetch --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER%
 if %ERRORLEVEL% == 128 goto :1
 
 git checkout --force pull/%PR_NUMBER% > nul 2>&1
+
 git diff --raw --no-renames --diff-filter=AM upstream/master...pull/%PR_NUMBER%
 
 goto :2
@@ -44,6 +45,7 @@ winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%FOL
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 
 git checkout --detach --force upstream/master > nul 2>&1
+
 git branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 
 pause
