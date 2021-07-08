@@ -39,11 +39,11 @@ git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pu
 goto :3
 
 :3
-set DIRECTORY_PATH=
-set /p DIRECTORY_PATH="Please enter the directory path to the manifest: "
-if "%DIRECTORY_PATH%" == "" goto :3
+::set DIRECTORY_PATH=
+::set /p DIRECTORY_PATH="Please enter the directory path to the manifest: "
+::if "%DIRECTORY_PATH%" == "" goto :3
 winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
-if %ERRORLEVEL% == -2147024893 goto :3
+::if %ERRORLEVEL% == -2147024893 goto :3
 winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
