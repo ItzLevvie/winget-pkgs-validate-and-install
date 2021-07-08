@@ -35,17 +35,19 @@ if %ERRORLEVEL% == 128 (
     goto :2
 )
 git -C "%REPOSITORY_PATH%" checkout pull/%PR_NUMBER% > nul 2>&1
-for /f "tokens=1,2,3,4,5 delims=/" %%a in ('git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
-    set DIRECTORY_PATH=%%a/%%b/%%c/%%d/%%e
+for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
+    set DIRECTORY_PATH_5=%%a/%%b/%%c/%%d/%%e
+    set DIRECTORY_PATH_7=%DIRECTORY_PATH_5%/%%f/%%g
 )
 goto :3
 
 :3
-::set DIRECTORY_PATH=
-::set /p DIRECTORY_PATH="Please enter the directory path to the manifest: "
-::if "%DIRECTORY_PATH%" == "" goto :3
-winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
-::if %ERRORLEVEL% == -2147024893 goto :3
+set DIRECTORY_PATH=%DIRECTORY_PATH_5%
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
+if %ERRORLEVEL% == -1978335191 (
+     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
+)
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
 winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
