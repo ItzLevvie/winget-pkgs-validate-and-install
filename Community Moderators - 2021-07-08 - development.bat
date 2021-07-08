@@ -18,8 +18,7 @@ if %ERRORLEVEL% == 9009 (
     echo Git is not installed.
     goto :EOF
 )
-cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" > nul 2>&1
-if %ERRORLEVEL% == 1 (
+if not exist "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" (
     echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist.
     goto :EOF
 )
