@@ -1,15 +1,8 @@
 @echo off
 cls
-(
-    echo {
-    echo     "network": { "downloader": "wininet" },
-    echo     "visual": { "progressBar": "rainbow" }
-    echo }
-) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
-:1
-cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" > nul 2>&1
-if %ERRORLEVEL% == 1 (
-    echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist.
+winget --version > nul 2>&1
+if %ERRORLEVEL% == 9009 (
+    echo Windows Package Manager is not installed.
     goto :EOF
 )
 git --version > nul 2>&1
@@ -17,6 +10,19 @@ if %ERRORLEVEL% == 9009 (
     echo Git is not installed.
     goto :EOF
 )
+cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" > nul 2>&1
+if %ERRORLEVEL% == 1 (
+    echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist.
+    goto :EOF
+)
+(
+    echo {
+    echo     "network": { "downloader": "wininet" },
+    echo     "visual": { "progressBar": "rainbow" }
+    echo }
+) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
+
+:1
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :1
