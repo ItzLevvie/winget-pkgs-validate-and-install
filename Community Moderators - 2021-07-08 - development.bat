@@ -1,6 +1,11 @@
 @echo off
 cls
-
+(
+    echo {
+    echo     "network": { "downloader": "wininet" },
+    echo     "visual": { "progressBar": "rainbow" }
+    echo }
+) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
 :1
 cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" > nul 2>&1
 if %ERRORLEVEL% == 1 (
