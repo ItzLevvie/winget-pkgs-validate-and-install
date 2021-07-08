@@ -52,6 +52,7 @@ winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
 if %ERRORLEVEL% == -1978335191 (
      set DIRECTORY_PATH=%DIRECTORY_PATH_7%
 )
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
