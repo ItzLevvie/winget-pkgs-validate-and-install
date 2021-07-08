@@ -18,8 +18,9 @@ if %ERRORLEVEL% == 9009 (
     echo Git is not installed.
     goto :EOF
 )
-if not exist "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" (
-    echo "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" does not exist.
+set REPOSITORY_PATH=C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs
+if not exist "%REPOSITORY_PATH%" (
+    echo "%REPOSITORY_PATH%" does not exist.
     goto :EOF
 )
 goto :2
@@ -28,25 +29,25 @@ goto :2
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :2
-::git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" fetch upstream master > nul 2>&1
-git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
+::git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
+git -C "%REPOSITORY_PATH%" fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% == 128 (
     echo "%PR_NUMBER%" does not exist.
     goto :2
 )
-git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" checkout pull/%PR_NUMBER% > nul 2>&1
-git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%
+git -C "%REPOSITORY_PATH%" checkout pull/%PR_NUMBER% > nul 2>&1
+git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%
 goto :3
 
 :3
 set DIRECTORY_PATH=
 set /p DIRECTORY_PATH="Please enter the directory path to the manifest: "
 if "%DIRECTORY_PATH%" == "" goto :3
-winget validate --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%DIRECTORY_PATH%"
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 if %ERRORLEVEL% == -2147024893 goto :3
-winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%DIRECTORY_PATH%"
-git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" checkout --detach upstream/master > nul 2>&1
-git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" branch --delete --force pull/%PR_NUMBER% > nul 2>&1
+winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
+git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
+git -C "%REPOSITORY_PATH%" branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
 cls
 goto :1
