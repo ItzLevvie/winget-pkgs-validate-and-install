@@ -49,7 +49,7 @@ winget install --manifest "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs/%DIR
 ::cd "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
 git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" checkout --detach upstream/master > nul 2>&1
 git -C "C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs" branch --delete --force pull/%PR_NUMBER% > nul 2>&1
-cd "C:/Users/%USERNAME%/Desktop"
+::cd "C:/Users/%USERNAME%/Desktop"
 pause
 cls
 goto :1
