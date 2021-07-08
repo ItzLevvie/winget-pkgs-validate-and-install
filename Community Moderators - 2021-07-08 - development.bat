@@ -35,7 +35,14 @@ if %ERRORLEVEL% == 128 (
     goto :2
 )
 git -C "%REPOSITORY_PATH%" checkout pull/%PR_NUMBER% > nul 2>&1
-git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%
+for /f "tokens=1,2,3,4,5 delims=/" %%a in ('git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
+    set a=%%a
+    set b=%%b
+    set c=%%c
+    set d=%%d
+    set e=%%e
+    set DIRECTORY_PATH=%a%/%b%/%c%/%d%/%e%
+)
 goto :3
 
 :3
