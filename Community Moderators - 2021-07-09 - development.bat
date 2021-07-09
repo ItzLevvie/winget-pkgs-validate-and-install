@@ -44,23 +44,26 @@ for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --
 goto :3
 
 :3
-echo Checking if the directory path has 5 folders.
+echo Checking if the directory path to the manifest has 5 folders.
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
 winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_5% > nul 2>&1
 if %ERRORLEVEL% == -1978335191 (
-    echo Checking if the directory path has 6 folders.
+    echo Checking if the directory path to the manifest has 6 folders.
     set DIRECTORY_PATH=%DIRECTORY_PATH_6%
     winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_6% > nul 2>&1
 )
 if %ERRORLEVEL% == -1978335191 (
-    echo Checking if the directory path has 7 folders.
+    echo Checking if the directory path to the manifest has 7 folders.
     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
     winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_7% > nul 2>&1
 )
 winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
 winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
+goto :4
+
+:4
 git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
 cls
-goto :1
+goto :2
