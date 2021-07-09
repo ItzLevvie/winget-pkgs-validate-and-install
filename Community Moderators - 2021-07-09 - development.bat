@@ -29,6 +29,7 @@ goto :2
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :2
+git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 ::if %ERRORLEVEL% == 128 (
     ::echo "%PR_NUMBER%" does not exist.
@@ -51,7 +52,6 @@ if %ERRORLEVEL% == -1978335191 set DIRECTORY_PATH=%DIRECTORY_PATH_7%
 winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
 winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
-git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
 git -C "%REPOSITORY_PATH%" branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
