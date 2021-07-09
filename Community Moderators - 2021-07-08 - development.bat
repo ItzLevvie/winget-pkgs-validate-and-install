@@ -45,16 +45,13 @@ goto :3
 :3
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
 winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
-if %ERRORLEVEL% == -1978335191 (
-    set DIRECTORY_PATH=%DIRECTORY_PATH_6%
-    winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
-    if %ERRORLEVEL% == -1978335191 (
-        set DIRECTORY_PATH=%DIRECTORY_PATH_7%
-        winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
-    )
-)
+if %ERRORLEVEL% == -1978335191 set DIRECTORY_PATH=%DIRECTORY_PATH_6%
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
+if %ERRORLEVEL% == -1978335191 set DIRECTORY_PATH=%DIRECTORY_PATH_7%
+winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%" > nul 2>&1
 winget validate --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
 winget install --manifest "%REPOSITORY_PATH%/%DIRECTORY_PATH%"
+set DIRECTORY_PATH=
 git -C "%REPOSITORY_PATH%" fetch upstream master > nul 2>&1
 git -C "%REPOSITORY_PATH%" checkout --detach upstream/master > nul 2>&1
 git -C "%REPOSITORY_PATH%" branch --delete --force pull/%PR_NUMBER% > nul 2>&1
