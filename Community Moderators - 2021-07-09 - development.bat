@@ -46,16 +46,16 @@ goto :3
 :3
 echo Checking if the directory path has 5 folders.
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
-winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_5% > nul 2>&1
 if %ERRORLEVEL% == -1978335191 (
     echo Checking if the directory path has 6 folders.
     set DIRECTORY_PATH=%DIRECTORY_PATH_6%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_6% > nul 2>&1
 )
 if %ERRORLEVEL% == -1978335191 (
     echo Checking if the directory path has 7 folders.
     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_7% > nul 2>&1
 )
 winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
 winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
