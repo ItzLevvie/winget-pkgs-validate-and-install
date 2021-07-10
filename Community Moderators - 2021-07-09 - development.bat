@@ -28,13 +28,12 @@ goto :2
 :2
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
-::if "%PR_NUMBER%" == "" goto :2
+if "%PR_NUMBER%" == "" (
+    cls
+    goto :2
+)
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
-::if %ERRORLEVEL% == 128 (
-    ::echo "%PR_NUMBER%" does not exist.
-    ::goto :2
-::)
 git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
 goto :3
 
