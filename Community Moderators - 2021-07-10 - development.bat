@@ -20,7 +20,7 @@ if %ERRORLEVEL% == 9009 (
 )
 set REPOSITORY_PATH="C:/Users/%USERNAME%/winget-pkgs"
 if not exist %REPOSITORY_PATH% (
-    git clone https://github.com/ItzLevvie2/winget-pkgs
+    git clone https://github.com/ItzLevvie2/winget-pkgs %REPOSITORY_PATH%
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs
 )
 goto :2
