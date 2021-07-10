@@ -61,6 +61,7 @@ goto :4
 :4
 winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
 winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
+goto :5
 
 :5
 git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
