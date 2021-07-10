@@ -18,10 +18,10 @@ if %ERRORLEVEL% == 9009 (
     echo Git is not installed.
     goto :EOF
 )
-set REPOSITORY_PATH="C:/Users/%USERNAME%/Documents/GitHub/winget-pkgs"
+set REPOSITORY_PATH="C:/Users/%USERNAME%/winget-pkgs"
 if not exist %REPOSITORY_PATH% (
-    echo %REPOSITORY_PATH% does not exist.
-    goto :EOF
+    git clone https://github.com/ItzLevvie2/winget-pkgs
+    git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs
 )
 goto :2
 
