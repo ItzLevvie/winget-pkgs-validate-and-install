@@ -28,7 +28,7 @@ goto :2
 :2
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
-if "%PR_NUMBER%" == "" goto :2
+::if "%PR_NUMBER%" == "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 ::if %ERRORLEVEL% == 128 (
@@ -36,14 +36,14 @@ git -C %REPOSITORY_PATH% fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMB
     ::goto :2
 ::)
 git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
+goto :3
+
+:3
 for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
     set DIRECTORY_PATH_5="%%a/%%b/%%c/%%d/%%e"
     set DIRECTORY_PATH_6="%%a/%%b/%%c/%%d/%%e/%%f"
     set DIRECTORY_PATH_7="%%a/%%b/%%c/%%d/%%e/%%f/%%g"
 )
-goto :3
-
-:3
 echo Checking if the directory path to the manifest has 5 folders.
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
 winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_5% > nul 2>&1
@@ -57,11 +57,13 @@ if %ERRORLEVEL% == -1978335191 (
     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
     winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_7% > nul 2>&1
 )
-winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
-winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
 goto :4
 
 :4
+winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
+winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
+
+:5
 git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
