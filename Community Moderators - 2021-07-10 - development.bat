@@ -9,8 +9,8 @@ if %ERRORLEVEL% == 9009 (
 )
 (
     echo {
-    echo    "network": {"downloader": "wininet"},
-    echo    "visual": {"progressBar": "rainbow"}
+    echo     "network": {"downloader": "wininet"},
+    echo     "visual": {"progressBar": "rainbow"}
     echo }
 ) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
 git --version > nul 2>&1
