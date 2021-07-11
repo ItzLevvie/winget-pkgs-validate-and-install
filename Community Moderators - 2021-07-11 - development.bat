@@ -22,6 +22,7 @@ if %ERRORLEVEL% == 1 (
     "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" /VERYSILENT /CURRENTUSER
     del "C:\Users\%USERNAME%\Downloads\Git-2.32.0.2-64-bit.exe" > nul 2>&1
     set PATH=%PATH%;"C:/Program Files/Git/cmd"
+    echo:
 )
 if %ERRORLEVEL% == 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
@@ -31,9 +32,9 @@ if not exist %REPOSITORY_PATH% (
 if %ERRORLEVEL% == 1 (
     git clone https://github.com/ItzLevvie2/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
+    echo:
 )
 if %ERRORLEVEL% == 2 goto :EOF
-echo:
 goto :2
 
 :2
