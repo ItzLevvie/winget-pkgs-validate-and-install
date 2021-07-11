@@ -23,9 +23,7 @@ if %ERRORLEVEL% == 1 (
     del "C:\Users\%USERNAME%\Downloads\Git-2.32.0.2-64-bit.exe" > nul 2>&1
     set PATH=%PATH%;"C:/Program Files/Git/cmd"
 )
-if %ERRORLEVEL% == 2 (
-    goto :EOF
-)
+if %ERRORLEVEL% == 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
 if not exist %REPOSITORY_PATH% (
     choice /n /m "winget-pkgs repository does not exist. Would you like to clone it (Y/N)?"
@@ -34,18 +32,14 @@ if %ERRORLEVEL% == 1 (
     git clone https://github.com/ItzLevvie2/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
 )
-if %ERRORLEVEL% == 2 (
-    goto :EOF
-)
+if %ERRORLEVEL% == 2 goto :EOF
 echo:
 goto :2
 
 :2
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
-if "%PR_NUMBER%" == "" (
-    goto :2
-)
+if "%PR_NUMBER%" == "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
