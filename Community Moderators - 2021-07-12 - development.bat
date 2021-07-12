@@ -4,7 +4,16 @@ cls
 :1
 winget --version > nul 2>&1
 if %ERRORLEVEL% == 9009 (
-    echo Windows Package Manager is not installed.
+    choice /n /m "Windows Package Manager is not installed. Would you like to install it (Y/N)?"
+)
+if %ERRORLEVEL% == 1 (
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
+    powershell Add-AppxPackage -Path "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx"
+    del "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
+    del "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
+)
+if %ERRORLEVEL% == 2 (
     goto :EOF
 )
 (
