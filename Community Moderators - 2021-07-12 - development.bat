@@ -13,9 +13,7 @@ if %ERRORLEVEL% == 1 (
     del "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     del "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
 )
-if %ERRORLEVEL% == 2 (
-    goto :EOF
-)
+if %ERRORLEVEL% == 2 goto :EOF
 (
     echo {
     echo     "network": {"downloader": "wininet"},
