@@ -35,7 +35,7 @@ if %ERRORLEVEL% EQU 1 (
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
-if not exist %REPOSITORY_PATH% (
+if not exist %REPOSITORY_PATH%/.git (
     choice /n /m "winget-pkgs repository does not exist. Would you like to clone it (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
