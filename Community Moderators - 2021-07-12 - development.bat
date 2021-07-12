@@ -3,6 +3,8 @@ cls
 
 :1
 if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" goto :EOF
+for /f "tokens=6 delims=. " %%a in ('ver') do set OS_BUILD=%%a
+if %OS_BUILD% LSS 19041 goto :EOF
 winget --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
     choice /n /m "Windows Package Manager is not installed. Would you like to install it (Y/N)?"
@@ -59,20 +61,20 @@ git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
 goto :3
 
 :3
-for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
+for /f "tokens=1,2,3,4,5,6,7 delims=/ " %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
     set DIRECTORY_PATH_5="%%a/%%b/%%c/%%d/%%e"
     set DIRECTORY_PATH_6="%%a/%%b/%%c/%%d/%%e/%%f"
     set DIRECTORY_PATH_7="%%a/%%b/%%c/%%d/%%e/%%f/%%g"
 )
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
-winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_5% > nul 2>&1
+winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
 if %ERRORLEVEL% EQU -1978335191 (
     set DIRECTORY_PATH=%DIRECTORY_PATH_6%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_6% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
 )
 if %ERRORLEVEL% EQU -1978335191 (
     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_7% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
 )
 goto :4
 
