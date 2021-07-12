@@ -38,6 +38,7 @@ if %ERRORLEVEL% == 2 goto :EOF
 goto :2
 
 :2
+cls
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" == "" goto :2
@@ -76,5 +77,4 @@ goto :5
 git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
-cls
 goto :2
