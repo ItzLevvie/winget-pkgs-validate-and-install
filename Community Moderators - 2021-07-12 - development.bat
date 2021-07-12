@@ -39,7 +39,7 @@ if not exist %REPOSITORY_PATH% (
 )
 if %ERRORLEVEL% == 1 (
     echo:
-    git clone https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
+    git clone --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
 )
 if %ERRORLEVEL% == 2 goto :EOF
