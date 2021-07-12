@@ -2,7 +2,7 @@
 cls
 
 :1
-if %PROCESSOR_ARCHITECTURE% NEQ "AMD64" goto :EOF
+if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" goto :EOF
 winget --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
     choice /n /m "Windows Package Manager is not installed. Would you like to install it (Y/N)?"
