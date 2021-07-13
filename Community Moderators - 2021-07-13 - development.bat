@@ -7,14 +7,14 @@ if %OS_BUILD% LSS 19041 goto :EOF
 if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" goto :EOF
 winget --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
-    choice /n /m "Windows Package Manager is not installed. Would you like to install it (Y/N)?"
+    choice /n /m "Windows Package Manager is not installed. Would you like to install it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
     powershell Add-AppxPackage -Path "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
-    set PATH=%PATH%;"C:/Users/%USERNAME%/AppData/Local/Microsoft/WindowsApps"
+    path %PATH%;"C:/Users/%USERNAME%/AppData/Local/Microsoft/WindowsApps"
     del "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     del "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
 )
@@ -27,19 +27,19 @@ if %ERRORLEVEL% EQU 2 goto :EOF
 ) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
 git --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
-    choice /n /m "Git is not installed. Would you like to install it (Y/N)?"
+    choice /n /m "Git is not installed. Would you like to install it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
     curl --location --url https://github.com/git-for-windows/git/releases/download/v2.32.0.windows.2/Git-2.32.0.2-64-bit.exe --output "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" > nul 2>&1
     "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" /VERYSILENT /CURRENTUSER
     del "C:\Users\%USERNAME%\Downloads\Git-2.32.0.2-64-bit.exe" > nul 2>&1
-    set PATH=%PATH%;"C:/Program Files/Git/cmd"
+    path %PATH%;"C:/Program Files/Git/cmd"
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
 if not exist %REPOSITORY_PATH%/.git (
-    choice /n /m "winget-pkgs repository does not exist. Would you like to clone it (Y/N)?"
+    choice /n /m "winget-pkgs repository does not exist. Would you like to clone it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
