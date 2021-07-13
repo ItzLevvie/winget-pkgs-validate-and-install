@@ -14,7 +14,7 @@ if %ERRORLEVEL% EQU 1 (
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
     powershell Add-AppxPackage -Path "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
-    set PATH=%PATH%;"C:/Users/%USERNAME%/AppData/Local/Microsoft/WindowsApps"
+    path %PATH%;"C:/Users/%USERNAME%/AppData/Local/Microsoft/WindowsApps"
     del "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     del "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
 )
@@ -34,7 +34,7 @@ if %ERRORLEVEL% EQU 1 (
     curl --location --url https://github.com/git-for-windows/git/releases/download/v2.32.0.windows.2/Git-2.32.0.2-64-bit.exe --output "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" > nul 2>&1
     "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" /VERYSILENT /CURRENTUSER
     del "C:\Users\%USERNAME%\Downloads\Git-2.32.0.2-64-bit.exe" > nul 2>&1
-    set PATH=%PATH%;"C:/Program Files/Git/cmd"
+    path %PATH%;"C:/Program Files/Git/cmd"
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
