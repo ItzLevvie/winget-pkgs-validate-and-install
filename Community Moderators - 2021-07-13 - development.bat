@@ -45,7 +45,6 @@ if %ERRORLEVEL% EQU 1 (
     echo:
     git clone --depth 2048 --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
-    git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 goto :2
@@ -55,6 +54,7 @@ cls
 set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" EQU "" goto :2
+git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch --depth 2048 upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% EQU 128 goto :2
 git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
