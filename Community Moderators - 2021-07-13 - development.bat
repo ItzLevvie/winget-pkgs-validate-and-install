@@ -67,14 +67,14 @@ for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --
     set DIRECTORY_PATH_7="%%a/%%b/%%c/%%d/%%e/%%f/%%g"
 )
 set DIRECTORY_PATH=%DIRECTORY_PATH_5%
-winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_5% > nul 2>&1
 if %ERRORLEVEL% EQU -1978335191 (
     set DIRECTORY_PATH=%DIRECTORY_PATH_6%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_6% > nul 2>&1
 )
 if %ERRORLEVEL% EQU -1978335191 (
     set DIRECTORY_PATH=%DIRECTORY_PATH_7%
-    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH% > nul 2>&1
+    winget validate --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH_7% > nul 2>&1
 )
 goto :4
 
@@ -87,4 +87,4 @@ goto :5
 git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
-goto :2
+goto :1
