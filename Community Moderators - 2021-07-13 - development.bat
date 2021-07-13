@@ -61,7 +61,7 @@ git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
 goto :3
 
 :3
-for /f "tokens=1,2,3,4,5,6,7 delims=/ " %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
+for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...pull/%PR_NUMBER%') do (
     set DIRECTORY_PATH_5="%%a/%%b/%%c/%%d/%%e"
     set DIRECTORY_PATH_6="%%a/%%b/%%c/%%d/%%e/%%f"
     set DIRECTORY_PATH_7="%%a/%%b/%%c/%%d/%%e/%%f/%%g"
