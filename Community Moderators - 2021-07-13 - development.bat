@@ -2,7 +2,7 @@
 cls
 
 :1
-for /f "tokens=3 delims=." %%a in ('ver') do set OS_BUILD=%%a
+for /f "tokens=4 delims=[.]" %%a in ('ver') do set OS_BUILD=%%a
 if %OS_BUILD% LSS 19041 goto :EOF
 if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" goto :EOF
 winget --version > nul 2>&1
