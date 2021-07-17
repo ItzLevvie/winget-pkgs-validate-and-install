@@ -55,9 +55,9 @@ set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" EQU "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
-git -C %REPOSITORY_PATH% fetch --depth 2560 upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --depth 2560 --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% EQU 128 goto :2
-git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
+git -C %REPOSITORY_PATH% checkout --force pull/%PR_NUMBER% > nul 2>&1
 goto :3
 
 :3
@@ -84,7 +84,7 @@ winget install --manifest %REPOSITORY_PATH%/%DIRECTORY_PATH%
 goto :5
 
 :5
-git -C %REPOSITORY_PATH% checkout --detach upstream/master > nul 2>&1
+git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
 pause
 goto :1
