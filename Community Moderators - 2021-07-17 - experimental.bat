@@ -7,7 +7,7 @@ if %OS_BUILD% LSS 19041 goto :EOF
 if "%PROCESSOR_ARCHITECTURE%" NEQ "AMD64" goto :EOF
 winget --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
-    choice /n /m "Windows Package Manager is not installed. Would you like to install it now (Y/N)?"
+    choice /n /m "Windows Package Manager is not installed on this PC. Would you like to install it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
@@ -27,7 +27,7 @@ if %ERRORLEVEL% EQU 2 goto :EOF
 ) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
 git --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
-    choice /n /m "Git is not installed. Would you like to install it now (Y/N)?"
+    choice /n /m "Git is not installed on this PC. Would you like to install it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
@@ -39,11 +39,11 @@ if %ERRORLEVEL% EQU 1 (
 if %ERRORLEVEL% EQU 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
 if not exist %REPOSITORY_PATH%/.git (
-    choice /n /m "winget-pkgs repository does not exist. Would you like to clone it now (Y/N)?"
+    choice /n /m "winget-pkgs repository does not exist on this PC. Would you like to clone it now (Y/N)?"
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
-    git clone --depth 2048 --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
+    git clone --depth 2560 --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
@@ -55,7 +55,7 @@ set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" EQU "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
-git -C %REPOSITORY_PATH% fetch --depth 2048 upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --depth 2560 upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% EQU 128 goto :2
 git -C %REPOSITORY_PATH% checkout pull/%PR_NUMBER% > nul 2>&1
 goto :3
