@@ -65,6 +65,7 @@ for /f "tokens=1,2,3,4,5,6,7 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --
     set RELATIVE_PATH_5="%%a/%%b/%%c/%%d/%%e"
     set RELATIVE_PATH_6="%%a/%%b/%%c/%%d/%%e/%%f"
     set RELATIVE_PATH_7="%%a/%%b/%%c/%%d/%%e/%%f/%%g"
+    set RELATIVE_PATH_8="%%a/%%b/%%c/%%d/%%e/%%f/%%g/%%h"
 )
 set RELATIVE_PATH=%RELATIVE_PATH_5%
 winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH_5% > nul 2>&1
@@ -75,6 +76,10 @@ if %ERRORLEVEL% EQU -1978335191 (
 if %ERRORLEVEL% EQU -1978335191 (
     set RELATIVE_PATH=%RELATIVE_PATH_7%
     winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH_7% > nul 2>&1
+)
+if %ERRORLEVEL% EQU -1978335191 (
+    set RELATIVE_PATH=%RELATIVE_PATH_8%
+    winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH_8% > nul 2>&1
 )
 goto :4
 
