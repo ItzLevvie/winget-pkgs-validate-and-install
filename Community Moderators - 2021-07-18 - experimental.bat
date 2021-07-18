@@ -87,6 +87,7 @@ goto :4
 echo:
 winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
+if %ERRORLEVEL% NEQ 0 copy /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
 goto :5
 
 :5
