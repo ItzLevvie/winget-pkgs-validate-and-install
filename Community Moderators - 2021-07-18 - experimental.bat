@@ -32,7 +32,7 @@ if %ERRORLEVEL% EQU 9009 (
 if %ERRORLEVEL% EQU 1 (
     echo:
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git.exe --output "C:/Users/%USERNAME%/Downloads/Git.exe" > nul 2>&1
-    "C:/Users/%USERNAME%/Downloads/Git.exe" /VERYSILENT /CURRENTUSER
+    "C:/Users/%USERNAME%/Downloads/Git.exe" /verysilent
     del "C:\Users\%USERNAME%\Downloads\Git.exe" > nul 2>&1
     path %PATH%;"C:/Program Files/Git/cmd"
 )
