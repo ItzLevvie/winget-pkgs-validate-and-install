@@ -31,7 +31,7 @@ if %ERRORLEVEL% EQU 9009 (
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
-    curl --location --url https://github.com/git-for-windows/git/releases/download/v2.32.0.windows.2/Git-2.32.0.2-64-bit.exe --output "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" > nul 2>&1
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git.exe --output "C:/Users/%USERNAME%/Downloads/Git.exe" > nul 2>&1
     "C:/Users/%USERNAME%/Downloads/Git-2.32.0.2-64-bit.exe" /VERYSILENT /CURRENTUSER
     del "C:\Users\%USERNAME%\Downloads\Git-2.32.0.2-64-bit.exe" > nul 2>&1
     path %PATH%;"C:/Program Files/Git/cmd"
@@ -84,6 +84,7 @@ if %ERRORLEVEL% EQU -1978335191 (
 goto :4
 
 :4
+echo:
 winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
 goto :5
@@ -91,5 +92,6 @@ goto :5
 :5
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
+echo:
 pause
 goto :1
