@@ -11,10 +11,10 @@ if %ERRORLEVEL% EQU 9009 (
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
-    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
-    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
-    powershell Add-AppxPackage -Path "C:/Users/%USERNAME%/Downloads/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:/Users/%USERNAME%/Downloads/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
-    path %PATH%;"C:/Users/%USERNAME%/AppData/Local/Microsoft/WindowsApps"
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
+    powershell Add-AppxPackage -Path "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
+    path %PATH%;"C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps"
     del /f "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     del /f "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
 )
@@ -24,7 +24,7 @@ if %ERRORLEVEL% EQU 2 goto :EOF
     echo     "network": {"downloader": "wininet"},
     echo     "visual": {"progressBar": "rainbow"}
     echo }
-) > "C:/Users/%USERNAME%/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
+) > "C:\Users\%USERNAME%\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 git --version > nul 2>&1
 if %ERRORLEVEL% EQU 9009 (
     choice /n /m "Git is not installed on this PC. Would you like to install it now (Y/N)?"
@@ -32,9 +32,9 @@ if %ERRORLEVEL% EQU 9009 (
 if %ERRORLEVEL% EQU 1 (
     echo:
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git.exe --output "C:/Users/%USERNAME%/Downloads/Git.exe" > nul 2>&1
-    "C:/Users/%USERNAME%/Downloads/Git.exe" /verysilent
+    "C:\Users\%USERNAME%\Downloads\Git.exe" /verysilent
     del /f "C:\Users\%USERNAME%\Downloads\Git.exe" > nul 2>&1
-    path %PATH%;"C:/Program Files/Git/cmd"
+    path %PATH%;"C:\Program Files\Git\cmd"
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 set REPOSITORY_PATH="C:/Users/%USERNAME%/Desktop/winget-pkgs"
@@ -87,7 +87,10 @@ goto :4
 echo:
 winget validate --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%/%RELATIVE_PATH%
-if %ERRORLEVEL% NEQ 0 copy /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    move /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*.exe" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
+    move /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*.msi" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
+)
 goto :5
 
 :5
