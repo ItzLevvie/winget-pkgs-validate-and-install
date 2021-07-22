@@ -14,10 +14,10 @@ if %ERRORLEVEL% EQU 1 (
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle --output "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx --output "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
     powershell Add-AppxPackage -Path "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -DependencyPath "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
-    path %PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps
-    setx path "%PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps" > nul 2>&1
     del /f "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     del /f "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
+    path %PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps
+    setx path "%PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps" > nul 2>&1
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
 (
