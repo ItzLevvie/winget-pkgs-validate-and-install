@@ -45,7 +45,7 @@ if not exist %REPOSITORY_PATH%\.git (
 )
 if %ERRORLEVEL% EQU 1 (
     echo:
-    git clone --branch master --depth 2560 --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
+    git clone --branch master --depth 5000 --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% > nul 2>&1
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs > nul 2>&1
 )
 if %ERRORLEVEL% EQU 2 goto :EOF
@@ -57,7 +57,7 @@ set PR_NUMBER=
 set /p PR_NUMBER="Please enter the pull request number: "
 if "%PR_NUMBER%" EQU "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
-git -C %REPOSITORY_PATH% fetch --depth 2560 --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --depth 5000 --force upstream refs/pull/%PR_NUMBER%/head:pull/%PR_NUMBER% > nul 2>&1
 if %ERRORLEVEL% EQU 128 goto :2
 git -C %REPOSITORY_PATH% checkout --force pull/%PR_NUMBER% > nul 2>&1
 goto :3
@@ -86,7 +86,6 @@ if %ERRORLEVEL% EQU -1978335191 (
 goto :4
 
 :4
-echo:
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% NEQ 0 (
@@ -98,6 +97,5 @@ goto :5
 :5
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 git -C %REPOSITORY_PATH% branch --delete --force pull/%PR_NUMBER% > nul 2>&1
-echo:
 pause
 goto :1
