@@ -53,22 +53,16 @@ if not exist %REPOSITORY_PATH%\.git (
     echo Successfully cloned.
     echo:
 )
-cls
 goto :2
 
 :2
+cls
 set PULL_REQUEST_NUMBER=
 set /p PULL_REQUEST_NUMBER="Please enter the pull request number: "
-if "%PULL_REQUEST_NUMBER%" EQU "" (
-    echo:
-    goto :2
-)
+if "%PULL_REQUEST_NUMBER%" EQU "" goto :2
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch --force upstream refs/pull/%PULL_REQUEST_NUMBER%/head > nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo:
-    goto :2
-)
+if %ERRORLEVEL% NEQ 0 goto :2
 git -C %REPOSITORY_PATH% checkout --force --detach FETCH_HEAD > nul 2>&1
 goto :3
 
@@ -109,4 +103,5 @@ goto :5
 git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 echo:
+pause
 goto :2
