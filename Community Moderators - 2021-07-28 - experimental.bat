@@ -102,6 +102,7 @@ if %ERRORLEVEL% NEQ 0 (
     move /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*.exe" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
     move /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*.msi" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
 )
+rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
 goto :5
 
 :5
