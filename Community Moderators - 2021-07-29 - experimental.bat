@@ -32,9 +32,9 @@ if not exist "C:\Program Files\Git\cmd\git.exe" (
     echo Please wait while we download Git.
     md "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet"
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-64-bit.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git-prerelease.exe" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git-prerelease.exe" > nul 2>&1
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-32-bit.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git-prerelease.exe" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git-prerelease.exe" > nul 2>&1
     )
     echo Successfully downloaded.
     echo:
