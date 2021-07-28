@@ -6,26 +6,18 @@ for /f "tokens=6 delims=[]. " %%a in ('ver') do set OPERATING_SYSTEM_BUILD=%%a
 if %OPERATING_SYSTEM_BUILD% LSS 19041 goto :EOF
 if not exist "C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download Windows Package Manager.
-    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" > nul 2>&1
+    md "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet"
+    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" > nul 2>&1
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" > nul 2>&1
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Windows Package Manager.
-    if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        powershell $ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx\" > nul 2>&1
-    ) else (
-        powershell $ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx\" > nul 2>&1
-    )
-    del /f /q "C:\Users\%USERNAME%\Downloads\Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" > nul 2>&1
-    if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        del /f /q "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" > nul 2>&1
-    ) else (
-        del /f /q "C:\Users\%USERNAME%\Downloads\Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" > nul 2>&1
-    )
+    powershell $ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" > nul 2>&1
+    rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
     path %PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps
     echo Successfully installed.
     echo:
@@ -38,21 +30,17 @@ if not exist "C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps\winget.exe
 ) > "C:\Users\%USERNAME%\AppData\Local\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 if not exist "C:\Program Files\Git\cmd\git.exe" (
     echo Please wait while we download Git.
+    md "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet"
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git_x64.exe" --output "C:\Users\%USERNAME%\Downloads\Git_x64.exe" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git_x64.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git.exe" > nul 2>&1
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git_x86.exe" --output "C:\Users\%USERNAME%\Downloads\Git_x86.exe" > nul 2>&1
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git_x86.exe" --output "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git.exe" > nul 2>&1
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        "C:\Users\%USERNAME%\Downloads\Git_x64.exe" /verysilent
-        del /f /q "C:\Users\%USERNAME%\Downloads\Git_x64.exe" > nul 2>&1
-    ) else (
-        "C:\Users\%USERNAME%\Downloads\Git_x86.exe" /verysilent
-        del /f /q "C:\Users\%USERNAME%\Downloads\Git_x86.exe" > nul 2>&1
-    )
+    "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Git.exe" /verysilent
+    rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
     path %PATH%;C:\Program Files\Git\cmd
     echo Successfully installed.
     echo:
