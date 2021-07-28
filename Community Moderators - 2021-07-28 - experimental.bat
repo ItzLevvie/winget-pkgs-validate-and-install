@@ -63,6 +63,7 @@ if "%PULL_REQUEST_NUMBER%" EQU "" (
     echo:
     goto :2
 )
+git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch --force upstream refs/pull/%PULL_REQUEST_NUMBER%/head > nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo:
@@ -72,7 +73,7 @@ git -C %REPOSITORY_PATH% checkout --force --detach FETCH_HEAD > nul 2>&1
 goto :3
 
 :3
-for /f "tokens=1,2,3,4,5,6,7,8 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d HEAD~1..HEAD') do (
+for /f "tokens=1,2,3,4,5,6,7,8 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...FETCH_HEAD') do (
     set RELATIVE_PATH_5="%%a\%%b\%%c\%%d\%%e"
     set RELATIVE_PATH_6="%%a\%%b\%%c\%%d\%%e\%%f"
     set RELATIVE_PATH_7="%%a\%%b\%%c\%%d\%%e\%%f\%%g"
