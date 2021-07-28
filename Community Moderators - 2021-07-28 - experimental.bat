@@ -91,7 +91,6 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% NEQ 0 (
     move /y "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\*.exe" "C:\Users\%USERNAME%\Desktop" > nul 2>&1
