@@ -101,7 +101,7 @@ rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
 goto :5
 
 :5
-git -C %REPOSITORY_PATH% fetch upstream master > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --no-write-fetch-head upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 echo:
 pause
