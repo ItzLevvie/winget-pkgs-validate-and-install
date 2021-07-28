@@ -60,7 +60,7 @@ cls
 set PULL_REQUEST_NUMBER=
 set /p PULL_REQUEST_NUMBER="Please enter the pull request number: "
 if "%PULL_REQUEST_NUMBER%" EQU "" goto :2
-git -C %REPOSITORY_PATH% fetch --no-write-fetch-head upstream master > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --no-write-fetch-head --force upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% fetch --force upstream refs/pull/%PULL_REQUEST_NUMBER%/head > nul 2>&1
 if %ERRORLEVEL% NEQ 0 goto :2
 git -C %REPOSITORY_PATH% checkout --force --detach FETCH_HEAD > nul 2>&1
@@ -101,7 +101,7 @@ rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
 goto :5
 
 :5
-git -C %REPOSITORY_PATH% fetch --no-write-fetch-head upstream master > nul 2>&1
+git -C %REPOSITORY_PATH% fetch --no-write-fetch-head --force upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 echo:
 pause
