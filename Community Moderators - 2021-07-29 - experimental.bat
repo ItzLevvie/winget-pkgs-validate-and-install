@@ -16,7 +16,7 @@ if not exist "C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps\winget.exe
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Windows Package Manager.
-    powershell $ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" > nul 2>&1
+    powershell -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\"" > nul 2>&1
     rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
     path %PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps
     echo Successfully installed.
@@ -92,11 +92,16 @@ goto :4
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
+powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
+    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+)
+powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+echo:
 goto :5
 
 :5
 git -C %REPOSITORY_PATH% fetch --no-write-fetch-head --force upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
-echo:
 pause
 goto :2
