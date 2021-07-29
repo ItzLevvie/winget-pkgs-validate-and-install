@@ -90,9 +90,9 @@ if %ERRORLEVEL% EQU -1978335191 (
 goto :4
 
 :4
+echo:
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -2147024893 (
-    echo:
     goto :5
 )
 powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
@@ -111,10 +111,10 @@ if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
 )
 powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 echo Successfully searched.
-echo:
 goto :5
 
 :5
+echo:
 git -C %REPOSITORY_PATH% fetch --no-write-fetch-head --force upstream master > nul 2>&1
 git -C %REPOSITORY_PATH% checkout --force --detach upstream/master > nul 2>&1
 pause
