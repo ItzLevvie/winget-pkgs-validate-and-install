@@ -106,8 +106,8 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 )
 powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
-echo:
 echo Successfully searched.
+echo:
 goto :5
 
 :5
