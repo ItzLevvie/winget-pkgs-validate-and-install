@@ -94,6 +94,7 @@ winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 echo:
 echo Please wait while we check the application.
+echo:
 powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
     powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
