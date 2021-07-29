@@ -90,7 +90,6 @@ if %ERRORLEVEL% EQU -1978335191 (
 goto :4
 
 :4
-echo:
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
