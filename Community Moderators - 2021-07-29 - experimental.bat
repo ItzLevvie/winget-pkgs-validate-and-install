@@ -93,14 +93,15 @@ goto :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 echo:
-echo Please wait while we check the registry for the application.
+echo Please wait while we search the registry for the installed application.
+echo Note: Some installed applications will not be shown immediately so you will have to manually search the registry for it.
 echo:
 powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
     powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 )
 powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
-echo Successfully checked.
+echo Successfully searched.
 echo:
 goto :5
 
