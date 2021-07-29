@@ -91,7 +91,8 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-if %ERRORLEVEL% EQU -1978335191 (
+if %ERRORLEVEL% EQU -2147024893 (
+    echo:
     goto :5
 )
 powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
