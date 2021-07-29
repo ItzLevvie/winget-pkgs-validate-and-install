@@ -87,19 +87,18 @@ if %ERRORLEVEL% EQU -1978335191 (
     set RELATIVE_PATH=%RELATIVE_PATH_8%
     winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_8% > nul 2>&1
 )
-if %ERRORLEVEL% EQU -1978335191 (
-    echo:
-    goto :5
-)
 goto :4
 
 :4
+winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
+if %ERRORLEVEL% EQU -1978335191 (
+    goto :5
+)
 powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
 if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
     powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
 )
 powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Remove-Item -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
-winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 echo:
 echo Please wait while we search the registry for the installed application.
@@ -110,11 +109,6 @@ if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
     powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 )
 powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
-powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
-if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
-)
-powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Remove-Item -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*
 echo Successfully searched.
 echo:
 goto :5
