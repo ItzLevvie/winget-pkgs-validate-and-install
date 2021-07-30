@@ -97,6 +97,10 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
 )
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
+if %ERRORLEVEL% EQU -1978335215 (
+    echo:
+    goto :5
+)
 echo:
 echo Please wait while we search the registry for the installed application.
 echo Note: Some installed applications will not be shown immediately so you will have to manually search the registry for it.
