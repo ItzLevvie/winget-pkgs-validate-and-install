@@ -96,7 +96,6 @@ powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVe
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
 )
-::powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Remove-Item -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 echo:
 echo Please wait while we search the registry for the installed application.
@@ -107,7 +106,6 @@ powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\Curr
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 )
-::powershell -Command "New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null ; Get-ItemProperty -Path HKU:S-1-5-21*\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 echo Successfully searched.
 echo:
 goto :5
