@@ -104,7 +104,7 @@ if %ERRORLEVEL% EQU -1978335215 (
 echo:
 echo Please wait while we search for the application in the registry.
 echo:
-echo Some applications will not be shown immediately after installation so you will have to manually search for the application in these registry keys:
+echo Some applications will not be shown immediately after installation so you will have to manually search for the application in these registry locations:
 echo 1^) Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
