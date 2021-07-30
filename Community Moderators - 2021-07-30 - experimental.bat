@@ -91,10 +91,10 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-powershell -Command "Remove-Item -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
-powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
+powershell -Command "Remove-Item -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
+powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
+    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
 )
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -1978335215 (
@@ -105,10 +105,10 @@ echo:
 echo Please wait while we search the registry for the installed application.
 echo Note: Some installed applications will not be shown immediately so you will have to manually search the registry for it.
 echo:
-powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
-powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 )
 echo Successfully searched.
 echo:
