@@ -102,7 +102,7 @@ if %ERRORLEVEL% EQU -1978335215 (
     goto :5
 )
 echo:
-echo Please wait while we search the registry for application.
+echo Please wait while we search the registry for the application.
 echo Some applications will not be shown immediately after installation so you will have to manually search the registry in these locations:
 echo 1) Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 echo 2) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
