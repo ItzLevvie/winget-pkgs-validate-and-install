@@ -104,10 +104,10 @@ if %ERRORLEVEL% EQU -1978335215 (
 echo:
 echo Please wait while we search the registry for the application.
 echo Some applications will not be shown immediately after installation so you will have to manually search the registry in these locations:
-echo 1) Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
-echo 2) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
+echo 1^) Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
+echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    echo 3) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
+    echo 3^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 )
 echo:
 powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
