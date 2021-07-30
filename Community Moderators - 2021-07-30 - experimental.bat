@@ -91,10 +91,10 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-powershell -Command "Remove-Item -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
-powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+powershell -Command "Remove-Item -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
+powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Force"
 )
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -1978335215 (
