@@ -111,7 +111,7 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     echo 3^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 )
 echo:
-timeout /t 10 /nobreak > nul 2>&1
+timeout /t 15 /nobreak > nul 2>&1
 powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
