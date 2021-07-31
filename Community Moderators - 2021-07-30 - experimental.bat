@@ -112,10 +112,10 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
 )
 echo:
 timeout /t 15 /nobreak > nul 2>&1
-powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
-powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}}"
+powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}}"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude "{*}.KB*" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName"
+    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}}"
 )
 echo Successfully searched.
 echo:
