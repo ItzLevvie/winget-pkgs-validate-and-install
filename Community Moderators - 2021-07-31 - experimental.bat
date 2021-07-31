@@ -16,7 +16,7 @@ if not exist "C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps\winget.exe
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Windows Package Manager.
-    powershell -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\"" > nul 2>&1
+    powershell -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"C:\Users\%USERNAME%\AppData\Local\Temp\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ErrorAction SilentlyContinue" > nul 2>&1
     rd /s /q "C:\Users\%USERNAME%\AppData\Local\Temp\WinGet" > nul 2>&1
     path %PATH%;C:\Users\%USERNAME%\AppData\Local\Microsoft\WindowsApps
     echo Successfully installed.
