@@ -111,7 +111,7 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     echo 3^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 )
 echo:
-timeout /t 15 /nobreak > nul 2>&1
+timeout /t 30 /nobreak > nul 2>&1
 powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
 powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
