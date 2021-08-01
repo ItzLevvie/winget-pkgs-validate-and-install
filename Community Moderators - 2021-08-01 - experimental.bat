@@ -91,10 +91,10 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-powershell -Command "Remove-Item -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
-powershell -Command "Remove-Item -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
+powershell -Command "Remove-Item -Path \"HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force" > nul 2>&1
+powershell -Command "Remove-Item -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force" > nul 2>&1
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Remove-Item -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Force" > nul 2>&1
+    powershell -Command "Remove-Item -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force" > nul 2>&1
 )
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -1978335215 (
@@ -103,8 +103,9 @@ if %ERRORLEVEL% EQU -1978335215 (
 )
 echo:
 echo Please wait while we search for the application in the registry.
+echo This will take 30 seconds.
 echo:
-echo Some applications may not be shown immediately after installation so you may have to manually search for the application in these registry locations:
+echo Please note that some applications may not be shown immediately after installation so you may have to manually search for the application in these registry locations:
 echo 1^) Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
@@ -112,10 +113,10 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
 )
 echo:
 timeout /t 30 /nobreak > nul 2>&1
-powershell -Command "Get-ItemProperty -Path HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
-powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
+powershell -Command "Get-ItemProperty -Path \"HKCU:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
+powershell -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
-    powershell -Command "Get-ItemProperty -Path HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
+    powershell -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName -ErrorAction SilentlyContinue | Format-Table @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"ProductCode\" ; Expression={$_.PSChildName}} -ErrorAction SilentlyContinue"
 )
 echo Successfully searched.
 echo:
