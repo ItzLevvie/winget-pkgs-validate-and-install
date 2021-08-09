@@ -112,6 +112,9 @@ winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -1978335215 (
     echo:
     goto :5
+) else if %ERRORLEVEL% EQU -1978335216 (
+    echo:
+    goto :5
 ) else if %ERRORLEVEL% EQU -2147009293 (
     echo:
     goto :5
