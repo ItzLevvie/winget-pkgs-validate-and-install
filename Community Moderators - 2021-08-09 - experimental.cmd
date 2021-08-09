@@ -118,6 +118,9 @@ if %ERRORLEVEL% EQU -1978335215 (
 ) else if %ERRORLEVEL% EQU -2147009293 (
     echo:
     goto :5
+) else if %ERRORLEVEL% EQU -2147467260 (
+    echo:
+    goto :5
 )
 winget show --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH% | find "  Type: Msix" 1>nul 2>nul
 if %ERRORLEVEL% EQU 0 (
