@@ -103,11 +103,11 @@ goto :4
 
 :4
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
+powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
-    powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
+    powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 )
-powershell -NoProfile -Command "Remove-Item -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
+powershell -NoProfile -Command "Remove-Item -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% EQU -1978335215 (
     echo:
@@ -129,7 +129,7 @@ if %ERRORLEVEL% EQU 0 (
 )
 echo:
 echo Please wait while we search for the application in the registry.
-echo Note: Some applications will not be shown immediately after installation, so you will have to search for the application in these registry paths:
+echo Note: Some applications will not be shown immediately after installation, so you will have to search for the application in these registry paths below.
 echo 1^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
     echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
@@ -139,7 +139,7 @@ if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
 )
 echo:
 echo This will take 30 seconds.
-echo Note: If you want to skip this, please press Ctrl + C and then N + Enter, and either use CCleaner or Revo Uninstaller to search for the application.
+echo Note: If you would like to skip this, please press Ctrl + C and then N + Enter, and either use CCleaner or Revo Uninstaller to search for the application.
 echo:
 timeout /t 30 /nobreak 1>nul 2>nul
 if %ERRORLEVEL% EQU 1 (
