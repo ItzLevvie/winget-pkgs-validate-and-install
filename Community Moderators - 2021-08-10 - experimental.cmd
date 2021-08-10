@@ -11,18 +11,18 @@ if %OS_BUILD% LSS 19041 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download WinGet.
-    mkdir "%TEMP%\20210809.1" 1>nul 2>nul
-    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210809.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    mkdir "%TEMP%\20210810.1" 1>nul 2>nul
+    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210810.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210809.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210810.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210809.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210810.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install WinGet.
-    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210809.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210809.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ErrorAction SilentlyContinue" 1>nul 2>nul
-    rmdir /s /q "%TEMP%\20210809.1" 1>nul 2>nul
+    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210810.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210810.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
+    rmdir /s /q "%TEMP%\20210810.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -36,17 +36,17 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
 )
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
-    mkdir "%TEMP%\20210809.1" 1>nul 2>nul
+    mkdir "%TEMP%\20210810.1" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210809.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210810.1\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210809.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210810.1\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    "%TEMP%\20210809.1\Git-prerelease.exe" /VERYSILENT
-    rmdir /s /q "%TEMP%\20210809.1" 1>nul 2>nul
+    "%TEMP%\20210810.1\Git-prerelease.exe" /VERYSILENT
+    rmdir /s /q "%TEMP%\20210810.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -80,13 +80,18 @@ goto :3
 
 :3
 for /f "tokens=1,2,3,4,5,6,7,8 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...FETCH_HEAD') do (
+    set RELATIVE_PATH_4="%%a\%%b\%%c\%%d"
     set RELATIVE_PATH_5="%%a\%%b\%%c\%%d\%%e"
     set RELATIVE_PATH_6="%%a\%%b\%%c\%%d\%%e\%%f"
     set RELATIVE_PATH_7="%%a\%%b\%%c\%%d\%%e\%%f\%%g"
     set RELATIVE_PATH_8="%%a\%%b\%%c\%%d\%%e\%%f\%%g\%%h"
 )
-set RELATIVE_PATH=%RELATIVE_PATH_5%
-winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_5% 1>nul 2>nul
+set RELATIVE_PATH=%RELATIVE_PATH_4%
+winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_4% 1>nul 2>nul
+if %ERRORLEVEL% EQU -1978335191 (
+    set RELATIVE_PATH=%RELATIVE_PATH_5%
+    winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_5% 1>nul 2>nul
+)
 if %ERRORLEVEL% EQU -1978335191 (
     set RELATIVE_PATH=%RELATIVE_PATH_6%
     winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_6% 1>nul 2>nul
@@ -115,6 +120,9 @@ if %ERRORLEVEL% EQU -1978335215 (
 ) else if %ERRORLEVEL% EQU -1978335216 (
     echo:
     goto :5
+) else if %ERRORLEVEL% EQU -2145844844 (
+    echo:
+    goto :5
 ) else if %ERRORLEVEL% EQU -2147009293 (
     echo:
     goto :5
@@ -129,7 +137,9 @@ if %ERRORLEVEL% EQU 0 (
 )
 echo:
 echo Please wait while we search for the application in the registry.
-echo Note: Some applications will not be shown immediately after installation, so you will have to search for the application in these registry paths below.
+echo Note: If the application is not listed below, then you will need to wait for a few minutes to make sure that the application has enough time to create the required registry keys, so that it will be listed in Control Panel's Add or Remove Programs ^(ARP^).
+echo:
+echo Once you have waited for a few minutes, then please search for the application in the registry paths below:
 echo 1^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
     echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
@@ -138,8 +148,8 @@ if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
     echo 2^) Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall
 )
 echo:
-echo This will take 30 seconds.
-echo Note: If you would like to skip this, please press Ctrl + C and then N + Enter, and either use CCleaner or Revo Uninstaller to search for the application.
+echo This will take 30 seconds to complete.
+echo Note: If you would like to skip this, then please press Ctrl + C and then N + Enter, and either use CCleaner or Revo Uninstaller to search for the application.
 echo:
 timeout /t 30 /nobreak 1>nul 2>nul
 if %ERRORLEVEL% EQU 1 (
