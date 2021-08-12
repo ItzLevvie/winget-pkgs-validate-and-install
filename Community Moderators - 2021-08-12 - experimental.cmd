@@ -66,7 +66,7 @@ goto :2
 
 :2
 set PULL_REQUEST_NUMBER=
-set /p PULL_REQUEST_NUMBER="Enter the pull request number: "
+set /p PULL_REQUEST_NUMBER="Enter a pull request number: "
 if "%PULL_REQUEST_NUMBER%" EQU "" (
     cls
     goto :2
@@ -139,7 +139,7 @@ if %ERRORLEVEL% EQU 0 (
 )
 echo:
 echo Please wait while we look for the application in the registry.
-echo Note: If the application is not listed below, you will need to wait for a few minutes to make sure the application has enough time to create the required registry keys to be listed in Control Panel.
+echo Note: If the application is not listed below, you will need to wait for a few minutes to make sure the application has enough time to create the required registry keys for the application to be listed in Control Panel.
 echo:
 echo Once you have waited for a few minutes, you will need to look for the application in the following registry paths below:
 echo 1^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
