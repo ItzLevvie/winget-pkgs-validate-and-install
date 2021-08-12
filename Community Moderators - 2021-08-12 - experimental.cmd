@@ -46,7 +46,7 @@ if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    "%TEMP%\20210812.1\Git-prerelease.exe" /VERYSILENT
+    "%TEMP%\20210812.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
     rmdir /s /q "%TEMP%\20210812.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
