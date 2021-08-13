@@ -129,6 +129,9 @@ if %ERRORLEVEL% EQU -1978335215 (
 ) else if %ERRORLEVEL% EQU -2147009293 (
     echo:
     goto :5
+) else if %ERRORLEVEL% EQU -2147023673 (
+    echo:
+    goto :5
 ) else if %ERRORLEVEL% EQU -2147467260 (
     echo:
     goto :5
