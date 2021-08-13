@@ -3,7 +3,6 @@ cls
 
 :1
 path %SystemRoot%\System32;%SystemRoot%\System32\WindowsPowerShell\v1.0
-chcp 65001 1>nul 2>nul
 for /f "tokens=6 delims=[]. " %%a in ('ver') do (
     set OS_BUILD=%%a
 )
@@ -12,18 +11,18 @@ if %OS_BUILD% LSS 19041 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download WinGet.
-    mkdir "%TEMP%\20210812.1" 1>nul 2>nul
-    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210812.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    mkdir "%TEMP%\20210813.1" 1>nul 2>nul
+    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210813.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210812.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210812.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install WinGet.
-    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210812.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210812.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
-    rmdir /s /q "%TEMP%\20210812.1" 1>nul 2>nul
+    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210813.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
+    rmdir /s /q "%TEMP%\20210813.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -37,17 +36,17 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
 )
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
-    mkdir "%TEMP%\20210812.1" 1>nul 2>nul
+    mkdir "%TEMP%\20210813.1" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210812.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210813.1\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210812.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210813.1\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    "%TEMP%\20210812.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
-    rmdir /s /q "%TEMP%\20210812.1" 1>nul 2>nul
+    "%TEMP%\20210813.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
+    rmdir /s /q "%TEMP%\20210813.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -81,6 +80,7 @@ git -C %REPOSITORY_PATH% checkout --force --detach FETCH_HEAD 1>nul 2>nul
 goto :3
 
 :3
+chcp 65001 1>nul 2>nul
 for /f "tokens=1,2,3,4,5,6,7,8 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff --name-only --diff-filter=d upstream/master...FETCH_HEAD') do (
     set RELATIVE_PATH_4="%%a\%%b\%%c\%%d"
     set RELATIVE_PATH_5="%%a\%%b\%%c\%%d\%%e"
@@ -88,6 +88,7 @@ for /f "tokens=1,2,3,4,5,6,7,8 delims=/" %%a in ('git -C %REPOSITORY_PATH% diff 
     set RELATIVE_PATH_7="%%a\%%b\%%c\%%d\%%e\%%f\%%g"
     set RELATIVE_PATH_8="%%a\%%b\%%c\%%d\%%e\%%f\%%g\%%h"
 )
+chcp 437 1>nul 2>nul
 set RELATIVE_PATH=%RELATIVE_PATH_4%
 winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH_4% 1>nul 2>nul
 if %ERRORLEVEL% EQU -1978335191 (
