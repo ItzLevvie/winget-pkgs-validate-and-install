@@ -11,18 +11,18 @@ if %OS_BUILD% LSS 19041 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download WinGet.
-    mkdir "%TEMP%\20210813.1" 1>nul 2>nul
-    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210813.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    mkdir "%TEMP%\20210819.1" 1>nul 2>nul
+    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210819.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install WinGet.
-    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210813.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210813.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
-    rmdir /s /q "%TEMP%\20210813.1" 1>nul 2>nul
+    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210819.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
+    rmdir /s /q "%TEMP%\20210819.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -36,17 +36,17 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
 )
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
-    mkdir "%TEMP%\20210813.1" 1>nul 2>nul
+    mkdir "%TEMP%\20210819.1" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210813.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210819.1\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210813.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210819.1\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    "%TEMP%\20210813.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
-    rmdir /s /q "%TEMP%\20210813.1" 1>nul 2>nul
+    "%TEMP%\20210819.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
+    rmdir /s /q "%TEMP%\20210819.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -54,7 +54,9 @@ path %SystemRoot%\System32;%SystemRoot%\System32\WindowsPowerShell\v1.0;%LOCALAP
 set REPOSITORY_PATH="%USERPROFILE%\Documents\GitHub\winget-pkgs"
 if not exist %REPOSITORY_PATH%\.git (
     echo Please wait while we clone the WinGet package repository.
+    git config --global core.ignoreCase true 1>nul 2>nul
     git config --global core.quotePath false 1>nul 2>nul
+    git config --global checkout.workers 0 1>nul 2>nul
     git clone --branch master --single-branch https://github.com/microsoft/winget-pkgs %REPOSITORY_PATH% 1>nul 2>nul
     git -C %REPOSITORY_PATH% remote add upstream https://github.com/microsoft/winget-pkgs 1>nul 2>nul
     echo Successfully cloned.
@@ -117,22 +119,7 @@ if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
 )
 powershell -NoProfile -Command "Remove-Item -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
-if %ERRORLEVEL% EQU -1978335215 (
-    echo:
-    goto :5
-) else if %ERRORLEVEL% EQU -1978335216 (
-    echo:
-    goto :5
-) else if %ERRORLEVEL% EQU -2145844844 (
-    echo:
-    goto :5
-) else if %ERRORLEVEL% EQU -2147009293 (
-    echo:
-    goto :5
-) else if %ERRORLEVEL% EQU -2147023673 (
-    echo:
-    goto :5
-) else if %ERRORLEVEL% EQU -2147467260 (
+if %ERRORLEVEL% NEQ 0 (
     echo:
     goto :5
 )
@@ -158,7 +145,7 @@ echo This will take 30 seconds to complete.
 echo Note: If you would like to skip this, press Ctrl + C and then press N + Enter, and use one of the following to look for the application: Control Panel, CCleaner, or Revo Uninstaller.
 echo:
 timeout /t 30 /nobreak 1>nul 2>nul
-if %ERRORLEVEL% EQU 1 (
+if %ERRORLEVEL% NEQ 0 (
     echo:
     goto :5
 )
