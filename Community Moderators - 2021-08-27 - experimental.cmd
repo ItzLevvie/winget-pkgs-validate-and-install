@@ -11,18 +11,18 @@ if %OS_BUILD% LSS 19041 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download WinGet.
-    mkdir "%TEMP%\20210819.1" 1>nul 2>nul
-    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210819.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    mkdir "%TEMP%\20210827.1" 1>nul 2>nul
+    curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle" --output "%TEMP%\20210827.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx" --output "%TEMP%\20210827.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx" --output "%TEMP%\20210827.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install WinGet.
-    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210819.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210819.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
-    rmdir /s /q "%TEMP%\20210819.1" 1>nul 2>nul
+    powershell -NoProfile -Command "$ProgressPreference = \"SilentlyContinue\" ; Add-AppxPackage -Path \"%TEMP%\20210827.1\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\" -DependencyPath \"%TEMP%\20210827.1\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx\" -ForceUpdateFromAnyVersion -ErrorAction SilentlyContinue" 1>nul 2>nul
+    rmdir /s /q "%TEMP%\20210827.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -36,17 +36,17 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
 )
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
-    mkdir "%TEMP%\20210819.1" 1>nul 2>nul
+    mkdir "%TEMP%\20210827.1" 1>nul 2>nul
     if "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210819.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x64.exe" --output "%TEMP%\20210827.1\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210819.1\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url "https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/latest/Git-prerelease-x86.exe" --output "%TEMP%\20210827.1\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
     echo Please wait while we install Git.
-    "%TEMP%\20210819.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
-    rmdir /s /q "%TEMP%\20210819.1" 1>nul 2>nul
+    "%TEMP%\20210827.1\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
+    rmdir /s /q "%TEMP%\20210827.1" 1>nul 2>nul
     echo Successfully installed.
     echo:
 )
@@ -149,11 +149,11 @@ if %ERRORLEVEL% NEQ 0 (
     echo:
     goto :5
 )
-powershell -NoProfile -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}} -ErrorAction SilentlyContinue" 2>nul
+powershell -NoProfile -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}}, @{Label=\"Uninstall\" ; Expression={\"winget uninstall \"\"\" + $_.PSChildName + \"\"\"\"}} -ErrorAction SilentlyContinue" 2>nul
 if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
-    powershell -NoProfile -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}} -ErrorAction SilentlyContinue" 2>nul
+    powershell -NoProfile -Command "Get-ItemProperty -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}}, @{Label=\"Uninstall\" ; Expression={\"winget uninstall \"\"\" + $_.PSChildName + \"\"\"\"}} -ErrorAction SilentlyContinue" 2>nul
 )
-powershell -NoProfile -Command "Get-ItemProperty -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}} -ErrorAction SilentlyContinue" 2>nul
+powershell -NoProfile -Command "Get-ItemProperty -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Exclude \"{*}.KB*\" -ErrorAction SilentlyContinue | Sort-Object DisplayName -ErrorAction SilentlyContinue | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, PSPath -ErrorAction SilentlyContinue | Format-List @{Label=\"Name\" ; Expression={$_.DisplayName}}, @{Label=\"Publisher\" ; Expression={$_.Publisher}}, @{Label=\"Version\" ; Expression={$_.DisplayVersion}}, @{Label=\"Product Code\" ; Expression={$_.PSChildName}}, @{Label=\"Registry Path\" ; Expression={$_.PSPath.Replace(\"Microsoft.PowerShell.Core\Registry::\", \"Computer\\\")}}, @{Label=\"Uninstall\" ; Expression={\"winget uninstall \"\"\" + $_.PSChildName + \"\"\"\"}} -ErrorAction SilentlyContinue" 2>nul
 echo Successfully looked.
 echo:
 goto :5
