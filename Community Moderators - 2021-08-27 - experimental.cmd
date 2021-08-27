@@ -112,12 +112,12 @@ if %ERRORLEVEL% EQU -1978335191 (
 goto :4
 
 :4
-winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 if "%PROCESSOR_ARCHITECTURE%" NEQ "x86" (
     powershell -NoProfile -Command "Remove-Item -Path \"HKLM:SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
 )
 powershell -NoProfile -Command "Remove-Item -Path \"HKCU:Software\Microsoft\Windows\CurrentVersion\Uninstall\*\" -Recurse -Force -ErrorAction SilentlyContinue" 1>nul 2>nul
+winget validate --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 winget install --manifest %REPOSITORY_PATH%\\%RELATIVE_PATH%
 if %ERRORLEVEL% NEQ 0 (
     echo:
