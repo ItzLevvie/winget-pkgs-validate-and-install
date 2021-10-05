@@ -12,7 +12,7 @@ if %OS_BUILD% LSS 19041 (
 reg query HKEY_USERS\S-1-5-19 1>nul 2>nul
 if %ERRORLEVEL% EQU 1 (
     if not exist "%TEMP%\%COMPUTERNAME%.local" (
-        echo You will need to run the script as an administrator for the first time.
+        echo "Community Moderators - 2021-10-05 - experimental.cmd" requires you to run with administrator privileges for the first time.
         echo:
         pause
         goto :EOF
@@ -42,6 +42,7 @@ if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Successfully installed.
     echo:
 )
+winget source remove --name msstore 1>nul 2>nul
 winget settings --enable LocalManifestFiles 1>nul 2>nul
 if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json" (
     (
