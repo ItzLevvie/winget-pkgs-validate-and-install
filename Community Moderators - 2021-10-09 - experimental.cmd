@@ -52,6 +52,7 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
         echo }
     ) > "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
 )
+reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /f 1>nul 2>nul & reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
     mkdir "%TEMP%\WinGet" 1>nul 2>nul
