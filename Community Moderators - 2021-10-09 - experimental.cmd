@@ -12,7 +12,7 @@ if %OS_BUILD% LSS 19041 (
 reg query HKEY_USERS\S-1-5-19 1>nul 2>nul
 if %ERRORLEVEL% EQU 1 (
     if not exist "%TEMP%\%COMPUTERNAME%.local" (
-        echo "Community Moderators - 2021-10-05 - experimental.cmd" requires you to run with administrator privileges for the first time.
+        echo This program requires administrator privileges when you are running it for the first time.
         echo:
         pause
         goto :EOF
@@ -26,13 +26,13 @@ if %ERRORLEVEL% EQU 0 (
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Please wait while we download WinGet.
     mkdir "%TEMP%\WinGet" 1>nul 2>nul
-    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else if %PROCESSOR_ARCHITECTURE% EQU x86 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
@@ -56,9 +56,9 @@ if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Please wait while we download Git.
     mkdir "%TEMP%\WinGet" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Git-prerelease-x64.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Git-prerelease-x64.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20210929.1/Git-prerelease-x86.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211009.1/Git-prerelease-x86.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Successfully downloaded.
     echo:
