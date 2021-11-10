@@ -58,9 +58,9 @@ if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Downloading Git ...
     mkdir "%TEMP%\WinGet" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211022.1/Git-prerelease-x64.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211110.1/Git-prerelease-x64.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211022.1/Git-prerelease-x86.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211110.1/Git-prerelease-x86.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Installing Git ...
     "%TEMP%\WinGet\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
