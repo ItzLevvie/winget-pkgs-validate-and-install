@@ -6,8 +6,8 @@ path %SystemRoot%\System32;%SystemRoot%\System32\WindowsPowerShell\v1.0;%LOCALAP
 for /f "tokens=6 delims=[]. " %%a in ('ver') do (
     set OS_BUILD=%%a
 )
-if %OS_BUILD% LSS 19042 (
-    echo This script requires Windows 10 version 20H2 or later to run.
+if %OS_BUILD% LSS 19041 (
+    echo This script requires Windows 10 version 20H1 or later to run.
     echo:
     echo You will need to update your PC to the latest version of Windows.
     pause
