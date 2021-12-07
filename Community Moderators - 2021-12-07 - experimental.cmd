@@ -115,6 +115,33 @@ if %ERRORLEVEL% NEQ 0 (
     echo:
     goto :6
 )
+chcp 65001 1>nul 2>nul
+for /f "usebackq tokens=1,2,3,4,5,6,7,8 delims=/" %%a in (`git -C "%REPOSITORY_PATH%" diff --name-only --diff-filter=d upstream/master...FETCH_HEAD ^| findstr /n "^" ^| findstr /r /c:"^1:manifests/"`) do (
+    set "RELATIVE_PATH_4=manifests\%%b\%%c\%%d"
+    set "RELATIVE_PATH_5=manifests\%%b\%%c\%%d\%%e"
+    set "RELATIVE_PATH_6=manifests\%%b\%%c\%%d\%%e\%%f"
+    set "RELATIVE_PATH_7=manifests\%%b\%%c\%%d\%%e\%%f\%%g"
+    set "RELATIVE_PATH_8=manifests\%%b\%%c\%%d\%%e\%%f\%%g\%%h"
+)
+chcp 437 1>nul 2>nul
+set "RELATIVE_PATH=%RELATIVE_PATH_4%"
+winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH_4%" 1>nul 2>nul
+if %ERRORLEVEL% EQU -1978335191 (
+    set "RELATIVE_PATH=%RELATIVE_PATH_5%"
+    winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH_5%" 1>nul 2>nul
+)
+if %ERRORLEVEL% EQU -1978335191 (
+    set "RELATIVE_PATH=%RELATIVE_PATH_6%"
+    winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH_6%" 1>nul 2>nul
+)
+if %ERRORLEVEL% EQU -1978335191 (
+    set "RELATIVE_PATH=%RELATIVE_PATH_7%"
+    winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH_7%" 1>nul 2>nul
+)
+if %ERRORLEVEL% EQU -1978335191 (
+    set "RELATIVE_PATH=%RELATIVE_PATH_8%"
+    winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH_8%" 1>nul 2>nul
+)
 goto :5
 
 :5
@@ -123,10 +150,18 @@ if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     reg delete HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul
 )
 reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul
-powershell -Command "Set-Location -Path '%REPOSITORY_PATH%' ; if ((git -C '%REPOSITORY_PATH%' diff --name-only --diff-filter=d upstream/master...FETCH_HEAD).GetType().Name -eq 'Object[]') { winget validate --manifest (Get-Item -Path (git -C '%REPOSITORY_PATH%' diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)[0]).DirectoryName ; if ($LASTEXITCODE -eq -1978335191) { return } else { winget install --manifest (Get-Item -Path (git -C '%REPOSITORY_PATH%' diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)[0]).DirectoryName ; Write-Host } } else { winget validate --manifest (Get-Item -Path (git -C '%REPOSITORY_PATH%' diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)).DirectoryName ; if ($LASTEXITCODE -eq -1978335191) { return } else { winget install --manifest (Get-Item -Path (git -C '%REPOSITORY_PATH%' diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)).DirectoryName ; Write-Host } }"
+winget validate --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH%"
+winget install --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH%"
 if %ERRORLEVEL% NEQ 0 (
+    echo:
     goto :6
 )
+winget show --manifest "%REPOSITORY_PATH%\%RELATIVE_PATH%" | findstr /r /c:"^  Type: Msix$" 1>nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    echo:
+    goto :6
+)
+echo:
 echo Finding the application in the following registry paths below...
 echo 1^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
