@@ -30,25 +30,23 @@ if %ERRORLEVEL% EQU 0 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Downloading WinGet...
-    mkdir "%TEMP%\WinGet" 1>nul 2>nul
-    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else if %PROCESSOR_ARCHITECTURE% EQU x86 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else if %PROCESSOR_ARCHITECTURE% EQU x86 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x86_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\WinGet\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Installing WinGet...
-    powershell -Command "$ProgressPreference = 'SilentlyContinue' ; Add-AppxPackage -Path '%TEMP%\WinGet\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle' -DependencyPath '%TEMP%\WinGet\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx','%TEMP%\WinGet\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx' -ForceApplicationShutdown -ForceUpdateFromAnyVersion" 1>nul 2>nul
-    rmdir /s /q "%TEMP%\WinGet" 1>nul 2>nul
+    powershell -Command "$ProgressPreference = 'SilentlyContinue' ; Add-AppxPackage -Path '%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle' -DependencyPath '%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx','%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx' -ForceApplicationShutdown -ForceUpdateFromAnyVersion" 1>nul 2>nul
     echo:
 )
 winget settings --enable LocalManifestFiles 1>nul 2>nul
@@ -64,15 +62,13 @@ if not exist "%LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbw
 reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /f 1>nul 2>nul & reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul && reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites /v Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall /t REG_SZ /d Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall /f 1>nul 2>nul
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Downloading Git...
-    mkdir "%TEMP%\WinGet" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211022.1/Git-prerelease-x64.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x64.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211022.1/Git-prerelease-x86.exe --output "%TEMP%\WinGet\Git-prerelease.exe" 1>nul 2>nul
+        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x86.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Installing Git...
-    "%TEMP%\WinGet\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
-    rmdir /s /q "%TEMP%\WinGet" 1>nul 2>nul
+    "%TEMP%\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
     echo:
 )
 set "REPOSITORY_PATH=%USERPROFILE%\Documents\GitHub\winget-pkgs"
@@ -166,7 +162,7 @@ if %ERRORLEVEL% EQU 0 (
     goto :6
 )
 echo:
-echo Looking for the application in the following registry paths below ...
+echo Finding the application in the following registry paths below...
 echo 1^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 if %PROCESSOR_ARCHITECTURE% NEQ x86 (
     echo 2^) Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
