@@ -30,20 +30,20 @@ if %ERRORLEVEL% EQU 0 (
 )
 if not exist "%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe" (
     echo Downloading WinGet...
-    curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
+    curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle --output "%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" 1>nul 2>nul
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else if %PROCESSOR_ARCHITECTURE% EQU x86 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else if %PROCESSOR_ARCHITECTURE% EQU x86 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_x86_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Microsoft.UI.Xaml.2.6_arm64_8wekyb3d8bbwe.appx --output "%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx" 1>nul 2>nul
     )
     echo Installing WinGet...
     powershell -Command "$ProgressPreference = 'SilentlyContinue' ; Add-AppxPackage -Path '%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle' -DependencyPath '%TEMP%\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx','%TEMP%\Microsoft.UI.Xaml.2.6_8wekyb3d8bbwe.appx' -ForceApplicationShutdown -ForceUpdateFromAnyVersion" 1>nul 2>nul
@@ -63,9 +63,9 @@ reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favori
 if not exist "%ProgramFiles%\Git\cmd\git.exe" (
     echo Downloading Git...
     if %PROCESSOR_ARCHITECTURE% EQU AMD64 (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x64.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x64.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
     ) else (
-        curl --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x86.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
+        curl --dns-ipv4-addr 1.1.1.1 --dns-ipv6-addr 2606:4700:4700::1111 --location --url https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211207.1/Git-prerelease-x86.exe --output "%TEMP%\Git-prerelease.exe" 1>nul 2>nul
     )
     echo Installing Git...
     "%TEMP%\Git-prerelease.exe" /VERYSILENT /SUPPRESSMSGBOXES
