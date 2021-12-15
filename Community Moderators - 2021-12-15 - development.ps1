@@ -7,10 +7,10 @@ function Initialize-PSSession {
     Clear-Host
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     $env:Path = $env:SystemRoot + "\System32" + ";" + $env:SystemRoot + "\System32\WindowsPowerShell\v1.0" + ";" + $env:LOCALAPPDATA + "\Microsoft\WindowsApps" + ";" + $env:ProgramFiles + "\Git\cmd"
-    Get-WindowsBuild
+    Get-WindowsOSBuild
 }
 
-function Get-WindowsBuild {
+function Get-WindowsOSBuild {
     $OS_BUILD = (Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name CurrentBuild)
     if ($OS_BUILD -lt 19041) {
         Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
@@ -22,7 +22,7 @@ function Get-WindowsBuild {
 }
 
 function Initialize-WinGetSoftware {
-    if ((Get-Command -Name winget) -eq $null -or (Get-AppxPackage -Name Microsoft.DesktopAppInstaller).Version -lt "1.17.3411.0") {
+    if ((Get-Command -Name winget) -eq $null -or (Get-AppxPackage -Name Microsoft.DesktopAppInstaller | Get-AppxPackageManifest).Package.Identity.Version -lt "1.17.3411.0" -eq $true) {
         if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544") {
             Write-Host "Downloading WinGet..."
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211211.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
@@ -66,18 +66,18 @@ function Initialize-GitSoftware {
     if ((Get-Command -Name git) -eq $null -or ($GIT_VERSION -lt "2.34.1")) {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211211.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211215.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211211.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211215.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES" -Wait
         Write-Host
     }
-    Initialize-GitRepository
+    Initialize-GitHubRepository
 }
 
-function Initialize-GitRepository {
+function Initialize-GitHubRepository {
     $REPOSITORY_DIRECTORY = $env:USERPROFILE + "\Documents\GitHub\winget-pkgs"
     if ((Test-Path -Path $REPOSITORY_DIRECTORY\.git) -eq $false) {
         Write-Host "Cloning the WinGet package repository..."
@@ -90,15 +90,17 @@ function Initialize-GitRepository {
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
         Write-Host
     }
-    Find-GitPullRequest
+    Request-GitHubPullRequest
 }
 
-function Find-GitPullRequest {
+function Request-GitHubPullRequest {
     Clear-Host
+    git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
+    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if ($PULL_REQUEST_NUMBER -eq $null) {
-        Find-GitPullRequest
+        Request-GitHubPullRequest
     } elseif (($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/"))) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/")
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimEnd("/files")
@@ -108,10 +110,10 @@ function Find-GitPullRequest {
     } elseif (($PULL_REQUEST_NUMBER.StartsWith("#"))) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("#")
     }
-    Get-GitPullRequest
+    Get-GitHubPullRequest
 }
 
-function Get-GitPullRequest {
+function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
@@ -120,12 +122,12 @@ function Get-GitPullRequest {
         Write-Host "This script requires the pull request to have no merge conflicts." -ForegroundColor Red
         Write-Host
         cmd /c pause
-        Find-GitPullRequest
+        Request-GitHubPullRequest
     }
-    Read-GitPullRequest
+    Read-GitHubPullRequest
 }
 
-function Read-GitPullRequest {
+function Read-GitHubPullRequest {
     $PACKAGE_MANIFEST_PATH = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
     if ($PACKAGE_MANIFEST_PATH.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
@@ -133,13 +135,13 @@ function Read-GitPullRequest {
             Write-Host
             Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
             Write-Host
-            Reset-GitRepository
+            Reset-GitHubRepository
         }
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path (Resolve-Path -Path ($REPOSITORY_DIRECTORY + "\" + $PACKAGE_MANIFEST_PATH[0]))).DirectoryName
     } else {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path (Resolve-Path -Path ($REPOSITORY_DIRECTORY + "\" + $PACKAGE_MANIFEST_PATH))).DirectoryName
     }
-    Invoke-WinGetValidation
+    Start-WinGetValidation
 }
 
 function Get-InstalledSoftware {
@@ -147,17 +149,17 @@ function Get-InstalledSoftware {
     return Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null}
 }
 
-function Invoke-WinGetValidation {
+function Start-WinGetValidation {
     Write-Host
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -eq -1978335191) {
-        Complete-WinGetValidation
+        Stop-WinGetValidation
     }
     $ARP = Get-InstalledSoftware
     winget install --manifest $PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -ne 0) {
         Write-Host
-        Complete-WinGetValidation
+        Stop-WinGetValidation
     }
     Find-InstalledSoftware
 }
@@ -186,18 +188,18 @@ Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
         Write-Host
         Compare-Object -ReferenceObject (Get-InstalledSoftware) -DifferenceObject $ARP -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Format-List @{Label = "Name"; Expression = {$_.DisplayName}}, @{Label = "Publisher"; Expression = {$_.Publisher}}, @{Label = "Version"; Expression = {$_.DisplayVersion}}, @{Label = "ProductCode"; Expression = {$_.PSChildName}}, @{Label = "Uninstall"; Expression = {if ($_.UninstallString -ne $null) {"winget uninstall " + """" + $_.PSChildName + """"}}}
     }
-    Complete-WinGetValidation
+    Stop-WinGetValidation
 }
 
-function Complete-WinGetValidation {
-    Reset-GitRepository
+function Stop-WinGetValidation {
+    Reset-GitHubRepository
 }
 
-function Reset-GitRepository {
+function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     cmd /c pause
-    Find-GitPullRequest
+    Request-GitHubPullRequest
 }
 
 Initialize-PSSession
