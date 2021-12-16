@@ -153,6 +153,7 @@ function Start-WinGetValidation {
     Write-Host
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -eq -1978335191) {
+        Write-Host
         Stop-WinGetValidation
     }
     $ARP = Get-InstalledSoftware
