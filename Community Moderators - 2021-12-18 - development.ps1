@@ -71,7 +71,7 @@ function Initialize-GitSoftware {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211215.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
-        Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES" -Wait
+        Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
         Write-Host
     }
     Initialize-GitHubRepository
@@ -82,12 +82,13 @@ function Initialize-GitHubRepository {
     if ((Test-Path -Path $REPOSITORY_DIRECTORY\.git) -eq $false) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global checkout.workers 0
-        git clone --quiet --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set
         Write-Host
     }
     Request-GitHubPullRequest
@@ -95,6 +96,7 @@ function Initialize-GitHubRepository {
 
 function Request-GitHubPullRequest {
     Clear-Host
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
@@ -114,6 +116,7 @@ function Request-GitHubPullRequest {
 }
 
 function Get-GitHubPullRequest {
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
@@ -121,14 +124,14 @@ function Get-GitHubPullRequest {
         Write-Host
         Write-Host "This script requires the pull request to have no merge conflicts." -ForegroundColor Red
         Write-Host
-        cmd /c pause
-        Request-GitHubPullRequest
+        Reset-GitHubRepository
     }
     Read-GitHubPullRequest
 }
 
 function Read-GitHubPullRequest {
     $PACKAGE_MANIFEST_PATH = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_PATH
     if ($PACKAGE_MANIFEST_PATH.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
         if ($PACKAGE_VERSION_DIRECTORIES.Count -gt 1) {
@@ -197,6 +200,7 @@ function Stop-WinGetValidation {
 }
 
 function Reset-GitHubRepository {
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     cmd /c pause
