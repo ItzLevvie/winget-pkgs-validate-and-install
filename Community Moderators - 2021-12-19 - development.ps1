@@ -96,9 +96,9 @@ function Initialize-GitHubRepository {
 
 function Request-GitHubPullRequest {
     Clear-Host
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if ($PULL_REQUEST_NUMBER -eq $null) {
@@ -116,9 +116,9 @@ function Request-GitHubPullRequest {
 }
 
 function Get-GitHubPullRequest {
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -147,11 +147,6 @@ function Read-GitHubPullRequest {
     Start-WinGetValidation
 }
 
-function Get-InstalledSoftware {
-    $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
-    return Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object DisplayName | Select-Object DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null}
-}
-
 function Start-WinGetValidation {
     Write-Host
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY
@@ -159,7 +154,8 @@ function Start-WinGetValidation {
         Write-Host
         Stop-WinGetValidation
     }
-    $ARP = Get-InstalledSoftware
+    $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
+    Remove-Item -Path $REGISTRY_PATHS
     winget install --manifest $PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -176,8 +172,6 @@ function Find-InstalledSoftware {
         $VERSION_MSIX = (Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Identity.Version
         $PACKAGE_FAMILY_NAME_MSIX = (Get-AppxPackage | Select-Object -Last 1).PackageFamilyName
         Write-Host
-        Write-Host
-        Write-Host
         Write-Host @"
 Name              : $NAME_MSIX
 Publisher         : $PUBLISHER_MSIX
@@ -186,11 +180,23 @@ PackageFamilyName : $PACKAGE_FAMILY_NAME_MSIX
 Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
 "@
         Write-Host
-        Write-Host
-        Write-Host
     } else {
+        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null}
+        $ARP | ForEach-Object {
+            $NAME_WIN32 = $_.DisplayName
+            $PUBLISHER_WIN32 = $_.Publisher
+            $VERSION_WIN32 = $_.DisplayVersion
+            $PRODUCT_CODE_WIN32 = $_.PSChildName
+            Write-Host @"
+
+Name        : $NAME_WIN32
+Publisher   : $PUBLISHER_WIN32
+Version     : $VERSION_WIN32
+ProductCode : $PRODUCT_CODE_WIN32
+Uninstall   : winget uninstall "$PRODUCT_CODE_WIN32"
+"@
+        }
         Write-Host
-        Compare-Object -ReferenceObject (Get-InstalledSoftware) -DifferenceObject $ARP -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Format-List @{Label = "Name"; Expression = {$_.DisplayName}}, @{Label = "Publisher"; Expression = {$_.Publisher}}, @{Label = "Version"; Expression = {$_.DisplayVersion}}, @{Label = "ProductCode"; Expression = {$_.PSChildName}}, @{Label = "Uninstall"; Expression = {if ($_.UninstallString -ne $null) {"winget uninstall " + """" + $_.PSChildName + """"}}}
     }
     Stop-WinGetValidation
 }
@@ -200,9 +206,9 @@ function Stop-WinGetValidation {
 }
 
 function Reset-GitHubRepository {
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     cmd /c pause
     Request-GitHubPullRequest
 }
