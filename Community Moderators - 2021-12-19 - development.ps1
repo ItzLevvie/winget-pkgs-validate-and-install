@@ -154,8 +154,9 @@ function Start-WinGetValidation {
         Write-Host
         Stop-WinGetValidation
     }
-    $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
-    Remove-Item -Path $REGISTRY_PATHS
+    if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544" -or ([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -ne "S-1-5-32-544") {
+        Start-Process -FilePath powershell -ArgumentList {$REGISTRY_PATHS = @("""HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"""); Remove-Item -Path $REGISTRY_PATHS} -Verb RunAs -WindowStyle Hidden -Wait
+    }
     winget install --manifest $PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -181,6 +182,7 @@ Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
 "@
         Write-Host
     } else {
+        $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
         $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null}
         $ARP | ForEach-Object {
             $NAME_WIN32 = $_.DisplayName
