@@ -7,12 +7,12 @@ function Initialize-PSSession {
     Clear-Host
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd"
-    Get-WindowsOSBuild
+    Get-OSBuild
 }
 
-function Get-WindowsOSBuild {
+function Get-OSBuild {
     if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt 19041) {
-        Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
+        Write-Host "This script requires OS build 19041 or later." -ForegroundColor Red
         Write-Host
         cmd /c pause
         break
