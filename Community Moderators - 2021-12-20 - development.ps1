@@ -163,36 +163,29 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    $IS_INSTALLER_TYPE_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY).Contains("  Type: msix")
-    if ($IS_INSTALLER_TYPE_MSIX -eq $true) {
-        $NAME_MSIX = (Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName
-        $PUBLISHER_MSIX = (Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.PublisherDisplayName
-        $VERSION_MSIX = (Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Identity.Version
-        $PACKAGE_FAMILY_NAME_MSIX = (Get-AppxPackage | Select-Object -Last 1).PackageFamilyName
+    if ((winget show --manifest $PACKAGE_VERSION_DIRECTORY).Trim().Contains("Type: msix")) {
         Write-Host
         Write-Host @"
-Name              : $NAME_MSIX
-Publisher         : $PUBLISHER_MSIX
-Version           : $VERSION_MSIX
-PackageFamilyName : $PACKAGE_FAMILY_NAME_MSIX
-Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
+Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
+Publisher         : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.PublisherDisplayName)
+Version           : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Identity.Version)
+PackageFamilyName : $((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)
+Uninstall         : winget uninstall "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
 "@
         Write-Host
     } else {
-        $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
-        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString, SystemComponent | Where-Object {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1}
-        $ARP | ForEach-Object {
-            $NAME_WIN32 = $_.DisplayName
-            $PUBLISHER_WIN32 = $_.Publisher
-            $VERSION_WIN32 = $_.DisplayVersion
-            $PRODUCT_CODE_WIN32 = $_.PSChildName
+        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
+        Sort-Object -Property DisplayName |
+        Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString, SystemComponent |
+        Where-Object {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1} |
+        ForEach-Object {
+            Write-Host
             Write-Host @"
-
-Name        : $NAME_WIN32
-Publisher   : $PUBLISHER_WIN32
-Version     : $VERSION_WIN32
-ProductCode : $PRODUCT_CODE_WIN32
-Uninstall   : winget uninstall "$PRODUCT_CODE_WIN32"
+Name        : $($_.DisplayName)
+Publisher   : $($_.Publisher)
+Version     : $($_.DisplayVersion)
+ProductCode : $($_.PSChildName)
+Uninstall   : winget uninstall "$($_.PSChildName)"
 "@
         }
         Write-Host
