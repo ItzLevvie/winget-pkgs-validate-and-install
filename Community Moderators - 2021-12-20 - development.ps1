@@ -11,8 +11,7 @@ function Initialize-PSSession {
 }
 
 function Get-WindowsOSBuild {
-    $OS_BUILD = (Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart
-    if ($OS_BUILD -lt 19041) {
+    if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt 19041) {
         Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
         Write-Host
         cmd /c pause
@@ -22,7 +21,7 @@ function Get-WindowsOSBuild {
 }
 
 function Initialize-WinGetSoftware {
-    if ((Get-Command -Name winget) -eq $null -or (Get-AppxPackage -Name Microsoft.DesktopAppInstaller | Get-AppxPackageManifest).Package.Identity.Version -lt "1.17.3411.0" -eq $true) {
+    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.2.3411") {
         if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544") {
             Write-Host "Downloading WinGet..."
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211211.1/Microsoft.DesktopAppInstaller_neutral_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
@@ -62,8 +61,7 @@ function Initialize-WinGetSoftware {
 }
 
 function Initialize-GitSoftware {
-    $GIT_VERSION = (git version).Trim("git version").Split(".")[0] + "." + (git version).Trim("git version").Split(".")[1] + "." + (git version).Trim("git version").Split(".")[2]
-    if ((Get-Command -Name git) -eq $null -or ($GIT_VERSION -lt "2.34.1")) {
+    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.34.1") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211215.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
@@ -82,13 +80,12 @@ function Initialize-GitHubRepository {
     if ((Test-Path -Path $REPOSITORY_DIRECTORY\.git) -eq $false) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global checkout.workers 0
-        git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git clone --quiet --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set
         Write-Host
     }
     Request-GitHubPullRequest
@@ -98,18 +95,15 @@ function Request-GitHubPullRequest {
     Clear-Host
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if ($PULL_REQUEST_NUMBER -eq $null) {
         Request-GitHubPullRequest
-    } elseif (($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/"))) {
-        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/")
-        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimEnd("/files")
-    } elseif (($PULL_REQUEST_NUMBER.StartsWith("pull/"))) {
-        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("pull/")
-        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimEnd("/files")
-    } elseif (($PULL_REQUEST_NUMBER.StartsWith("#"))) {
+    } elseif ($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
+        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/").TrimEnd("/files")
+    } elseif ($PULL_REQUEST_NUMBER.StartsWith("pull/")) {
+        $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("pull/").TrimEnd("/files")
+    } elseif ($PULL_REQUEST_NUMBER.StartsWith("#")) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("#")
     }
     Get-GitHubPullRequest
@@ -118,7 +112,6 @@ function Request-GitHubPullRequest {
 function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -131,7 +124,6 @@ function Get-GitHubPullRequest {
 
 function Read-GitHubPullRequest {
     $PACKAGE_MANIFEST_PATH = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_PATH
     if ($PACKAGE_MANIFEST_PATH.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
         if ($PACKAGE_VERSION_DIRECTORIES.Count -gt 1) {
@@ -210,7 +202,6 @@ function Stop-WinGetValidation {
 function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
     cmd /c pause
     Request-GitHubPullRequest
 }
