@@ -11,7 +11,7 @@ function Initialize-PSSession {
 }
 
 function Get-WindowsOSBuild {
-    if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt 19041) {
+    if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt "19041") {
         Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
         Write-Host
         cmd /c pause
@@ -174,7 +174,9 @@ Uninstall         : winget uninstall "$((Get-AppxPackage | Select-Object -Last 1
 "@
         Write-Host
     } else {
-        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
+        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+                                 "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
+                                 "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
         Sort-Object -Property DisplayName |
         Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString, SystemComponent |
         Where-Object {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1} |
