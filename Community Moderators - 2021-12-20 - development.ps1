@@ -175,7 +175,7 @@ Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
         Write-Host
     } else {
         $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
-        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null -and $_.DisplayName -notmatch "Additional Runtime" -and $_.DisplayName -notmatch "Minimum Runtime"}
+        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null -and $_.DisplayName -notlike "* Additional Runtime *" -and $_.DisplayName -notlike "* Minimum Runtime *"}
         $ARP | ForEach-Object {
             $NAME_WIN32 = $_.DisplayName
             $PUBLISHER_WIN32 = $_.Publisher
