@@ -7,12 +7,12 @@ function Initialize-PSSession {
     Clear-Host
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd"
-    Get-OSBuild
+    Get-WindowsOSBuild
 }
 
-function Get-OSBuild {
+function Get-WindowsOSBuild {
     if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt 19041) {
-        Write-Host "This script requires OS build 19041 or later." -ForegroundColor Red
+        Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
         Write-Host
         cmd /c pause
         break
@@ -77,7 +77,7 @@ function Initialize-GitSoftware {
 
 function Initialize-GitHubRepository {
     $REPOSITORY_DIRECTORY = $env:USERPROFILE + "\Documents\GitHub\winget-pkgs"
-    if ((Test-Path -Path $REPOSITORY_DIRECTORY\.git) -eq $false) {
+    if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git)) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global checkout.workers 0
         git clone --quiet --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
@@ -97,7 +97,7 @@ function Request-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
-    if ($PULL_REQUEST_NUMBER -eq $null) {
+    if (-not($PULL_REQUEST_NUMBER)) {
         Request-GitHubPullRequest
     } elseif ($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/").TrimEnd("/files")
@@ -175,7 +175,7 @@ Uninstall         : winget uninstall "$PACKAGE_FAMILY_NAME_MSIX"
         Write-Host
     } else {
         $REGISTRY_PATHS = @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*")
-        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null}
+        $ARP = Get-ItemProperty -Path $REGISTRY_PATHS | Sort-Object -Property DisplayName | Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString | Where-Object {$_.DisplayName -ne $null -and $_.UninstallString -ne $null -and $_.DisplayName -notmatch "Additional Runtime" -and $_.DisplayName -notmatch "Minimum Runtime"}
         $ARP | ForEach-Object {
             $NAME_WIN32 = $_.DisplayName
             $PUBLISHER_WIN32 = $_.Publisher
