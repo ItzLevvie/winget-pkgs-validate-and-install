@@ -126,20 +126,21 @@ function Get-GitHubPullRequest {
 }
 
 function Read-GitHubPullRequest {
+    $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
+    if ($PACKAGE_VERSION_DIRECTORIES.GetType().Name -eq "Object[]") {
+        Write-Host
+        Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
+        Write-Host
+        Reset-GitHubRepository
+    }
     $PACKAGE_MANIFEST_FILE = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_FILE
     if ($PACKAGE_MANIFEST_FILE.GetType().Name -eq "Object[]") {
-        $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
-        if ($PACKAGE_VERSION_DIRECTORIES.Count -gt 1) {
-            Write-Host
-            Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
-            Write-Host
-            Reset-GitHubRepository
-        }
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
-        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path (Resolve-Path -Path ($REPOSITORY_DIRECTORY + "\" + $PACKAGE_MANIFEST_FILE[0]))).DirectoryName
+        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE[0])")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     } else {
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
-        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path (Resolve-Path -Path ($REPOSITORY_DIRECTORY + "\" + $PACKAGE_MANIFEST_FILE))).DirectoryName
+        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE)")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     }
     Start-WinGetValidation
 }
@@ -149,12 +150,12 @@ function Start-WinGetValidation {
         Start-Process -FilePath powershell -ArgumentList {$REGISTRY_PATHS = @("""HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"""); Remove-Item -Path $REGISTRY_PATHS} -Verb RunAs -WindowStyle Hidden -Wait
     }
     Write-Host
-    winget validate --manifest $PACKAGE_VERSION_DIRECTORY
+    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -eq -1978335191) {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $PACKAGE_VERSION_DIRECTORY
+    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
@@ -163,7 +164,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    if ((winget show --manifest $PACKAGE_VERSION_DIRECTORY).Trim().Contains("Type: msix")) {
+    if ((winget show --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY).Trim().Contains("Type: msix")) {
         Write-Host
         Write-Host @"
 Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
