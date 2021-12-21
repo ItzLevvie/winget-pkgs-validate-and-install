@@ -146,7 +146,7 @@ function Read-GitHubPullRequest {
 }
 
 function Start-WinGetValidation {
-    powershell Start-Process -FilePath powershell -ArgumentList "{Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*')}" -Verb RunAs -WindowStyle Hidden -Wait > $null
+    powershell Start-Process -FilePath powershell -ArgumentList "{Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -Force}" -Verb RunAs -WindowStyle Hidden -Wait > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Reset-GitHubRepository
