@@ -179,8 +179,8 @@ Uninstall         : winget uninstall "$((Get-AppxPackage | Select-Object -Last 1
                                  "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
         Sort-Object -Property DisplayName |
         Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString, SystemComponent |
-        Where-Object {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1} |
-        ForEach-Object {
+        Where-Object -FilterScript {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1} |
+        ForEach-Object -Process {
             Write-Host
             Write-Host @"
 Name        : $($_.DisplayName)
