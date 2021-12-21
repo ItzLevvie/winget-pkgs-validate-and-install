@@ -146,8 +146,10 @@ function Read-GitHubPullRequest {
 }
 
 function Start-WinGetValidation {
-    if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544" -or ([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -ne "S-1-5-32-544") {
-        Start-Process -FilePath powershell -ArgumentList {$REGISTRY_PATHS = @("""HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*""", """HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*"""); Remove-Item -Path $REGISTRY_PATHS} -Verb RunAs -WindowStyle Hidden -Wait
+    powershell Start-Process -FilePath powershell -ArgumentList "{Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -WhatIf}" -Verb RunAs -WindowStyle Hidden -Wait > $null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host
+        Reset-GitHubRepository
     }
     Write-Host
     winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
