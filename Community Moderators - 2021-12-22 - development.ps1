@@ -149,7 +149,7 @@ function Start-WinGetValidation {
     powershell Start-Process -FilePath powershell -ArgumentList "{Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -Force}" -Verb RunAs -WindowStyle Hidden -Wait > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
-        Reset-GitHubRepository
+        Stop-WinGetValidation
     }
     Write-Host
     winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
