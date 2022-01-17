@@ -44,7 +44,7 @@ function Initialize-WinGetSoftware {
 }
 
 function Initialize-WinGetSoftware2 {
-    if (-not(Test-Path -Path $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json)) {
+    if (-not(Test-Path -Path $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json -PathType Leaf)) {
         if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544") {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20211231.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
             winget settings --enable LocalManifestFiles > $null
@@ -77,7 +77,7 @@ function Initialize-GitSoftware {
 
 function Initialize-GitHubRepository {
     $REPOSITORY_DIRECTORY = "$env:USERPROFILE\Documents\GitHub\winget-pkgs"
-    if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git)) {
+    if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git -PathType Container)) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global checkout.workers 0
         git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
@@ -146,7 +146,7 @@ function Read-GitHubPullRequest {
 }
 
 function Start-WinGetValidation {
-    powershell Start-Process -FilePath powershell -ArgumentList "{Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -Force}" -Verb RunAs -WindowStyle Hidden -Wait > $null
+    powershell Start-Process -FilePath powershell -ArgumentList "{New-PSDrive -Name HCR -PSProvider Registry -Root HKEY_CLASSES_ROOT; Remove-Item -Path HCR:\Installer\* -Recurse -Force; Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -Recurse -Force}" -Verb RunAs -WindowStyle Hidden -Wait > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
@@ -190,7 +190,7 @@ Name        : $($_.DisplayName)
 Publisher   : $($_.Publisher)
 Version     : $($_.DisplayVersion)
 ProductCode : $($_.PSChildName)
-Uninstall   : winget uninstall "$($_.PSChildName)"
+Uninstall   : winget uninstall --id "$($_.PSChildName)"
 "@
         }
         Write-Host
