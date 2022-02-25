@@ -134,13 +134,13 @@ function Read-GitHubPullRequest {
         Reset-GitHubRepository
     }
     $PACKAGE_MANIFEST_FILE = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_MANIFEST_FILE
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_FILE
     if ($PACKAGE_MANIFEST_FILE.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE[0])")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     } else {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE)")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     }
     Start-WinGetValidation
 }
