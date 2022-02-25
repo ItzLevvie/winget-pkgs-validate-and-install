@@ -1,4 +1,4 @@
-# Run "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" (without double quotes) in Windows PowerShell.
+# Run "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" (without the double quotes) in Windows PowerShell.
 
 $ErrorActionPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -64,9 +64,9 @@ function Initialize-GitSoftware {
     if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.35.1") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220217.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220225.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220217.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220225.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
@@ -86,7 +86,7 @@ function Initialize-GitHubRepository {
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
         Write-Host
     }
     Request-GitHubPullRequest
@@ -96,7 +96,7 @@ function Request-GitHubPullRequest {
     Clear-Host
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if (-not($PULL_REQUEST_NUMBER)) {
@@ -114,7 +114,7 @@ function Request-GitHubPullRequest {
 function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -134,13 +134,13 @@ function Read-GitHubPullRequest {
         Reset-GitHubRepository
     }
     $PACKAGE_MANIFEST_FILE = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_FILE
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_MANIFEST_FILE
     if ($PACKAGE_MANIFEST_FILE.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE[0])")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     } else {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE)")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     }
     Start-WinGetValidation
 }
@@ -205,7 +205,7 @@ function Stop-WinGetValidation {
 function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     cmd /c pause
     Request-GitHubPullRequest
 }
