@@ -12,7 +12,7 @@ function Initialize-PSSession {
 
 function Get-WindowsOSBuild {
     if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt "19041") {
-        Write-Host "This script requires Windows 10 version 20H1 or later." -ForegroundColor Red
+        Write-Host "This script requires Windows 10 version 20H1 or later to run." -ForegroundColor Red
         Write-Host
         cmd /c pause
         break
@@ -64,9 +64,9 @@ function Initialize-GitSoftware {
     if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.35.1") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220225.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220314.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220225.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220314.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
@@ -157,7 +157,7 @@ function Start-WinGetValidation {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
+    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
