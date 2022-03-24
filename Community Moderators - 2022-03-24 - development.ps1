@@ -152,12 +152,12 @@ function Start-WinGetValidation {
         Stop-WinGetValidation
     }
     Write-Host
-    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
+    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --verbose-logs
     if ($LASTEXITCODE -eq -1978335191) {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements
+    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements --verbose-logs
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
@@ -181,16 +181,17 @@ Uninstall         : winget uninstall "$((Get-AppxPackage | Select-Object -Last 1
                                  "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
                                  "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
         Sort-Object -Property DisplayName |
-        Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, UninstallString, SystemComponent |
+        Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, PSPath, UninstallString, SystemComponent |
         Where-Object -FilterScript {$_.DisplayName -ne $null -and $_.SystemComponent -ne 1} |
         ForEach-Object -Process {
             Write-Host
             Write-Host @"
-Name        : $($_.DisplayName)
-Publisher   : $($_.Publisher)
-Version     : $($_.DisplayVersion)
-ProductCode : $($_.PSChildName)
-Uninstall   : winget uninstall --id "$($_.PSChildName)"
+Name          : $($_.DisplayName)
+Publisher     : $($_.Publisher)
+Version       : $($_.DisplayVersion)
+ProductCode   : $($_.PSChildName)
+Registry Path : $(($_.PSPath).Replace("Microsoft.PowerShell.Core\Registry::", "Computer\"))
+Uninstall     : winget uninstall --id "$($_.PSChildName)"
 "@
         }
         Write-Host
