@@ -21,7 +21,7 @@ function Get-WindowsOSBuild {
 }
 
 function Initialize-WinGetSoftware {
-    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.431") {
+    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.692") {
         Write-Host "Downloading WinGet..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220324.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
