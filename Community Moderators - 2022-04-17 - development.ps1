@@ -173,7 +173,7 @@ Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackage
 Publisher         : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.PublisherDisplayName)
 Version           : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Identity.Version)
 PackageFamilyName : $((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)
-Uninstall         : winget uninstall "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
+Uninstall         : winget uninstall --id "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
 "@
         Write-Host
     } else {
