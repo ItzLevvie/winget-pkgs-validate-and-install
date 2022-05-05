@@ -80,13 +80,14 @@ function Initialize-GitHubRepository {
     if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git -PathType Container)) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global checkout.workers 0
-        git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        #git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git clone --quiet --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
+        #git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
         Write-Host
     }
     Request-GitHubPullRequest
@@ -96,7 +97,7 @@ function Request-GitHubPullRequest {
     Clear-Host
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
+    #git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if (-not($PULL_REQUEST_NUMBER)) {
@@ -114,7 +115,7 @@ function Request-GitHubPullRequest {
 function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
+    #git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -134,13 +135,13 @@ function Read-GitHubPullRequest {
         Reset-GitHubRepository
     }
     $PACKAGE_MANIFEST_FILE = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD)
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_FILE
+    #git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_MANIFEST_FILE
     if ($PACKAGE_MANIFEST_FILE.GetType().Name -eq "Object[]") {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE[0])")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        #git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     } else {
         $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE)")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
+        #git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
     }
     Start-WinGetValidation
 }
@@ -206,7 +207,7 @@ function Stop-WinGetValidation {
 function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
+    #git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
     cmd /c pause
     Request-GitHubPullRequest
 }
