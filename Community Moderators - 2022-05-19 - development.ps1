@@ -21,9 +21,9 @@ function Get-WindowsOSBuild {
 }
 
 function Initialize-WinGetSoftware {
-    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.1251") {
+    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.1391") {
         Write-Host "Downloading WinGet..."
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220509.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220519.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220509.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220509.1/Microsoft.UI.Xaml.2.7_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.UI.Xaml.2.7_8wekyb3d8bbwe.appx
@@ -61,12 +61,12 @@ function Initialize-WinGetSoftware2 {
 }
 
 function Initialize-GitSoftware {
-    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.36.0") {
+    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.36.1") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220509.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220519.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220509.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220519.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
