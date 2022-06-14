@@ -7,6 +7,7 @@ function Initialize-PSSession {
     Clear-Host
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd"
+    Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
     Get-WindowsOSBuild
 }
 
@@ -51,7 +52,7 @@ function Initialize-WinGetSoftware2 {
             winget source remove --name msstore > $null
             winget source update --name winget > $null
         } else {
-            Write-Host "This script requires administrator privileges to initialize WinGet." -ForegroundColor Red
+            Write-Host "This script requires administrator privileges to initialize WinGet for the first time." -ForegroundColor Red
             Write-Host
             cmd /c pause
             break
