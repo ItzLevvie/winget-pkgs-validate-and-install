@@ -22,7 +22,7 @@ function Get-WindowsOSBuild {
 }
 
 function Initialize-WinGetSoftware {
-    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.1611") {
+    if (-not(Get-Command -Name winget) -or (winget --version).TrimStart("v").Split("-")[0] -lt "1.3.1661") {
         Write-Host "Downloading WinGet..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220620.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
@@ -62,7 +62,7 @@ function Initialize-WinGetSoftware2 {
 }
 
 function Initialize-GitSoftware {
-    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.36.1") {
+    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.37.0") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220620.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
