@@ -6,7 +6,7 @@ $ProgressPreference = "SilentlyContinue"
 function Initialize-PSSession {
     Clear-Host
     [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-    $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd"
+    $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links" + ";" + "$env:ProgramFiles\Git\cmd"
     if ($env:USERNAME -eq "WDAGUtilityAccount") {
         if (-not(Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled)) {
             Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
