@@ -5,8 +5,13 @@ $ProgressPreference = "SilentlyContinue"
 
 function Initialize-PSSession {
     Clear-Host
-    [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-    $env:Path = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links" + ";" + "$env:ProgramFiles\Git\cmd"
+    if (([System.Console]::OutputEncoding).CodePage -ne "65001") {
+        [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    }
+    $PATH = "$env:SystemRoot\System32" + ";" + "$env:SystemRoot\System32\WindowsPowerShell\v1.0" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links" + ";" + "$env:ProgramFiles\Git\cmd"
+    if ($env:PATH -ne $PATH) {
+        $env:PATH = $PATH
+    }
     if ($env:USERNAME -eq "WDAGUtilityAccount") {
         if (-not(Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled)) {
             Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
@@ -172,7 +177,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    if ((winget show --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY).Trim().Contains("Type: msix")) {
+    if ((winget show --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY).Trim().Contains("Installer Type: msix")) {
         Write-Host
         Write-Host @"
 Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
