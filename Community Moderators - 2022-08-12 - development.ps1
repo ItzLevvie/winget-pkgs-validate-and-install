@@ -71,12 +71,12 @@ function Initialize-WinGetSoftware2 {
 }
 
 function Initialize-GitSoftware {
-    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.37.1") {
+    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.37.2") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220806.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220812.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220806.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220812.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
