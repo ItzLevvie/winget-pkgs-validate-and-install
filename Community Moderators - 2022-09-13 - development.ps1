@@ -90,6 +90,7 @@ function Initialize-GitHubRepository {
     if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git -PathType Container)) {
         Write-Host "Cloning the WinGet package repository..."
         git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git config --global --add safe.directory $REPOSITORY_DIRECTORY.Replace("\", "/")
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         git -C $REPOSITORY_DIRECTORY config --local gc.auto 0
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
