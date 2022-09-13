@@ -129,7 +129,7 @@ function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
-        Write-Host "This script requires the pull request to have no merge conflicts." -ForegroundColor Red
+        Write-Host "This script requires the pull request to be valid and have no merge conflicts." -ForegroundColor Red
         Write-Host
         Reset-GitHubRepository
     }
