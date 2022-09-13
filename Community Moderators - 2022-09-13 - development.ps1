@@ -165,12 +165,12 @@ function Start-WinGetValidation {
         Stop-WinGetValidation
     }
     Write-Host
-    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --verbose-logs
+    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
     if ($LASTEXITCODE -eq -1978335191) {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements --verbose-logs
+    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
