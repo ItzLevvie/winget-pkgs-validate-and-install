@@ -1,4 +1,4 @@
-# Run "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" (without the double quotes) in Windows PowerShell.
+# This script requires "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" in Windows PowerShell version 5.1
 
 $ErrorActionPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -97,7 +97,7 @@ function Initialize-GitHubRepository {
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+        git -C $REPOSITORY_DIRECTORY sparse-checkout set --no-cone !/*
         Write-Host
     }
     Request-GitHubPullRequest
@@ -105,7 +105,7 @@ function Initialize-GitHubRepository {
 
 function Request-GitHubPullRequest {
     Clear-Host
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set --no-cone !/*
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
@@ -123,7 +123,7 @@ function Request-GitHubPullRequest {
 }
 
 function Get-GitHubPullRequest {
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set --no-cone !/*
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
@@ -137,22 +137,14 @@ function Get-GitHubPullRequest {
 }
 
 function Read-GitHubPullRequest {
-    $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD)
+    $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
     if ($PACKAGE_VERSION_DIRECTORIES.GetType().Name -eq "Object[]") {
         Write-Host
         Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
         Write-Host
         Reset-GitHubRepository
     }
-    $PACKAGE_MANIFEST_FILE = (git -C $REPOSITORY_DIRECTORY diff --name-only --diff-filter=d upstream/master...FETCH_HEAD) | Select-Object -First 1
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set /$PACKAGE_MANIFEST_FILE
-    if ($PACKAGE_MANIFEST_FILE.GetType().Name -eq "Object[]") {
-        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE[0])")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
-    } else {
-        $PACKAGE_VERSION_DIRECTORY = (Get-Item -Path ("$($REPOSITORY_DIRECTORY)\$($PACKAGE_MANIFEST_FILE)")).DirectoryName.Replace("$REPOSITORY_DIRECTORY\", "")
-        git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY.Replace("\", "/")
-    }
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORIES
     Start-WinGetValidation
 }
 
@@ -165,12 +157,12 @@ function Start-WinGetValidation {
         Stop-WinGetValidation
     }
     Write-Host
-    winget validate --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY
+    winget validate --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\"))
     if ($LASTEXITCODE -eq -1978335191) {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY --accept-package-agreements
+    winget install --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\")) --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
@@ -179,7 +171,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    if ((winget show --manifest $REPOSITORY_DIRECTORY\$PACKAGE_VERSION_DIRECTORY).Trim().Contains("Installer Type: msix")) {
+    if ((winget show --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\"))).Trim().Contains("Installer Type: msix")) {
         Write-Host
         Write-Host @"
 Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
@@ -217,7 +209,7 @@ function Stop-WinGetValidation {
 }
 
 function Reset-GitHubRepository {
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set --no-cone !/*
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     cmd /c pause
