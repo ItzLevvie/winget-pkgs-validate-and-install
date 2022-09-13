@@ -160,6 +160,8 @@ function Start-WinGetValidation {
     powershell Start-Process -FilePath powershell -ArgumentList "{ New-PSDrive -Name HCR -PSProvider Registry -Root HKEY_CLASSES_ROOT; Remove-Item -Path HCR:\Installer\* -Recurse -Force; Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*') -Recurse -Force }" -Verb RunAs -WindowStyle Hidden -Wait > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
+        Write-Host "This script requires you to accept UAC." -ForegroundColor Red
+        Write-Host
         Stop-WinGetValidation
     }
     Write-Host
