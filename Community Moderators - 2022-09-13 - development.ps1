@@ -94,7 +94,7 @@ function Initialize-GitHubRepository {
         git -C $REPOSITORY_DIRECTORY config --local gc.auto 0
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
         git -C $REPOSITORY_DIRECTORY config --local core.quotePath false
-        git -C $REPOSITORY_DIRECTORY config --local core.sparseCheckoutCone true
+        git -C $REPOSITORY_DIRECTORY config --local core.sparseCheckoutCone false
         git -C $REPOSITORY_DIRECTORY config --local user.name $env:COMPUTERNAME
         git -C $REPOSITORY_DIRECTORY config --local user.email "$env:COMPUTERNAME.local"
         git -C $REPOSITORY_DIRECTORY sparse-checkout set !/*
