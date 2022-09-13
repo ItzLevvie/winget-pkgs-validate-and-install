@@ -89,8 +89,8 @@ function Initialize-GitHubRepository {
     $REPOSITORY_DIRECTORY = "$env:USERPROFILE\Documents\GitHub\winget-pkgs"
     if (-not(Test-Path -Path $REPOSITORY_DIRECTORY\.git -PathType Container)) {
         Write-Host "Cloning the WinGet package repository..."
-        git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git config --global --add safe.directory $REPOSITORY_DIRECTORY.Replace("\", "/")
+        git clone --quiet --no-checkout --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         git -C $REPOSITORY_DIRECTORY config --local gc.auto 0
         git -C $REPOSITORY_DIRECTORY config --local core.ignoreCase true
@@ -137,14 +137,14 @@ function Get-GitHubPullRequest {
 }
 
 function Read-GitHubPullRequest {
-    $PACKAGE_VERSION_DIRECTORIES = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
-    if ($PACKAGE_VERSION_DIRECTORIES.GetType().Name -eq "Object[]") {
+    $PACKAGE_VERSION_DIRECTORY = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
+    if ($PACKAGE_VERSION_DIRECTORY.GetType().Name -eq "Object[]") {
         Write-Host
         Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
         Write-Host
         Reset-GitHubRepository
     }
-    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORIES
+    git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY
     Start-WinGetValidation
 }
 
@@ -157,12 +157,12 @@ function Start-WinGetValidation {
         Stop-WinGetValidation
     }
     Write-Host
-    winget validate --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\"))
+    winget validate --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\"))
     if ($LASTEXITCODE -eq -1978335191) {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\")) --accept-package-agreements
+    winget install --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\")) --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
@@ -171,7 +171,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    if ((winget show --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORIES.Replace("/", "\"))).Trim().Contains("Installer Type: msix")) {
+    if ((winget show --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\"))).Trim().Contains("Installer Type: msix")) {
         Write-Host
         Write-Host @"
 Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
