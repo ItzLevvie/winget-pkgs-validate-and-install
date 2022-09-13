@@ -106,8 +106,8 @@ function Initialize-GitHubRepository {
 function Request-GitHubPullRequest {
     Clear-Host
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
-    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     $PULL_REQUEST_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if (-not($PULL_REQUEST_NUMBER)) {
@@ -124,8 +124,8 @@ function Request-GitHubPullRequest {
 
 function Get-GitHubPullRequest {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
-    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY pull --quiet upstream refs/pull/$PULL_REQUEST_NUMBER/head > $null
     if ($LASTEXITCODE -ne 0) {
         Write-Host
@@ -216,8 +216,8 @@ function Stop-WinGetValidation {
 
 function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
-    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
+    git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
     cmd /c pause
     Request-GitHubPullRequest
 }
