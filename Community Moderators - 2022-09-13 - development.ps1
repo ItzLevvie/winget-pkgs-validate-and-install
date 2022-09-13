@@ -24,7 +24,7 @@ function Get-WindowsOSBuild {
     if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt "19041") {
         Write-Host "This script requires Windows 10 version 20H1 or later to run." -ForegroundColor Red
         Write-Host
-        & "$env:SystemRoot\System32\cmd.exe" /c pause
+        cmd /c pause
         break
     }
     Initialize-WinGetSoftware
@@ -63,7 +63,7 @@ function Initialize-WinGetSoftware2 {
         } else {
             Write-Host "This script requires administrator privileges to initialize WinGet for the first time." -ForegroundColor Red
             Write-Host
-            & "$env:SystemRoot\System32\cmd.exe" /c pause
+            cmd /c pause
             break
         }
     }
@@ -220,7 +220,7 @@ function Reset-GitHubRepository {
     git -C $REPOSITORY_DIRECTORY sparse-checkout set !/* --no-cone
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --quiet upstream master
     git -C $REPOSITORY_DIRECTORY reset --quiet --hard upstream/master
-    & "$env:SystemRoot\System32\cmd.exe" /c pause
+    cmd /c pause
     Request-GitHubPullRequest
 }
 
