@@ -1,4 +1,4 @@
-# This script requires "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" in Windows PowerShell version 5.1
+# This script requires you to run "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" in Windows PowerShell version 5.1
 
 $ErrorActionPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
