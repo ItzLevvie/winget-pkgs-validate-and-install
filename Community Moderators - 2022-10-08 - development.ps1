@@ -1,4 +1,4 @@
-# This script requires "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" in Windows PowerShell version 5.1
+# This script requires you to run "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force" in Windows PowerShell version 5.1
 
 $ErrorActionPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -74,9 +74,9 @@ function Initialize-GitSoftware {
     if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.37.3") {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220913.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20221008.1/Git-prerelease-64-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         } else {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20220913.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20221008.1/Git-prerelease-32-bit.exe -OutFile $env:TEMP\Git-prerelease.exe
         }
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-prerelease.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
@@ -182,9 +182,7 @@ Uninstall         : winget uninstall --id "$((Get-AppxPackage | Select-Object -L
 "@
         Write-Host
     } else {
-        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
-                                 "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
-                                 "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
+        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
         Sort-Object -Property DisplayName |
         Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, PSPath, UninstallString, SystemComponent |
         Where-Object -FilterScript { $_.DisplayName -ne $null -and $_.SystemComponent -ne 1 } |
