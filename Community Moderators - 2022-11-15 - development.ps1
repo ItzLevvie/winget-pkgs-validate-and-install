@@ -171,7 +171,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    $WINGET_SHOW_MANIFEST = (winget show --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\"))).Trim()
+    $WINGET_SHOW_MANIFEST = (winget show --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\"))).Trim() | Out-String
     if (($WINGET_SHOW_MANIFEST.Contains("Type: msix")) -or ($WINGET_SHOW_MANIFEST.Contains("Type: appx"))) {
         Write-Host
         Write-Host @"
