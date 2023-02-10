@@ -58,6 +58,7 @@ function Initialize-WinGetSoftware2 {
         if (([System.Security.Principal.WindowsIdentity]::GetCurrent()).Owner.Value -eq "S-1-5-32-544") {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20230124.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
             winget settings --enable LocalManifestFiles > $null
+            winget settings --enable LocalArchiveMalwareScanOverride > $null
             winget source remove --name msstore > $null
             winget source update --name winget > $null
         } else {
@@ -162,7 +163,7 @@ function Start-WinGetValidation {
         Write-Host
         Stop-WinGetValidation
     }
-    winget install --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\")) --accept-package-agreements
+    winget install --manifest $REPOSITORY_DIRECTORY\$($PACKAGE_VERSION_DIRECTORY.Replace("/", "\")) --ignore-local-archive-malware-scan --accept-package-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         Stop-WinGetValidation
