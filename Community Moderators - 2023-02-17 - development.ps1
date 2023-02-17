@@ -21,8 +21,8 @@ function Initialize-PSSession {
 }
 
 function Get-WindowsOSBuild {
-    if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt "19041") {
-        Write-Host "This script requires Windows 10 version 20H1 or later to run." -ForegroundColor Red
+    if ((Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart -lt "19045") {
+        Write-Host "This script requires Windows 10 version 22H2 or later to run." -ForegroundColor Red
         Write-Host
         cmd /c pause
         break
