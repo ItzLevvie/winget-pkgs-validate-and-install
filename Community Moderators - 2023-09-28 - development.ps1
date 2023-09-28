@@ -66,9 +66,9 @@ function Initialize-WinGetSoftware2 {
 }
 
 function Initialize-GitSoftware {
-    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.41.0") {
+    if (-not(Get-Command -Name git) -or (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2] -lt "2.42.0") {
         Write-Host "Downloading Git..."
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20230609.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20230928.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-64-bit.exe -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
         Write-Host
