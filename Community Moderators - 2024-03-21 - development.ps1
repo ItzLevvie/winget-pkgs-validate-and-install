@@ -12,11 +12,6 @@ function Initialize-PSSession {
     if ($env:PATH -ne $PATH) {
         $env:PATH = $PATH
     }
-    if ($env:USERNAME -eq "WDAGUtilityAccount") {
-        if (-not(Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled)) {
-            Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
-        }
-    }
     Get-WindowsOSBuild
 }
 
@@ -26,6 +21,13 @@ function Get-WindowsOSBuild {
         Write-Host
         cmd /c pause
         break
+    }
+    Initialize-WindowsSettings
+}
+
+function Initialize-WindowsSettings {
+    if (-not(Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled)) {
+        Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
     }
     Initialize-WinGetSoftware
 }
@@ -55,7 +57,8 @@ function Initialize-WinGetSettings {
             winget settings --enable LocalArchiveMalwareScanOverride > $null
             winget source remove --name msstore > $null
             winget source update --name winget > $null
-        } else {
+        }
+        else {
             Write-Host "This script requires administrator privileges to initialize WinGet for the first time." -ForegroundColor Red
             Write-Host
             cmd /c pause
@@ -103,11 +106,14 @@ function Request-GitHubPullRequest {
     $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.Trim()
     if (-not($PULL_REQUEST_NUMBER)) {
         Request-GitHubPullRequest
-    } elseif ($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
+    }
+    elseif ($PULL_REQUEST_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/").TrimEnd("/files")
-    } elseif ($PULL_REQUEST_NUMBER.StartsWith("pull/")) {
+    }
+    elseif ($PULL_REQUEST_NUMBER.StartsWith("pull/")) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("pull/").TrimEnd("/files")
-    } elseif ($PULL_REQUEST_NUMBER.StartsWith("#")) {
+    }
+    elseif ($PULL_REQUEST_NUMBER.StartsWith("#")) {
         $PULL_REQUEST_NUMBER = $PULL_REQUEST_NUMBER.TrimStart("#")
     }
     Get-GitHubPullRequest
@@ -172,7 +178,8 @@ PackageFamilyName : $((Get-AppxPackage | Select-Object -Last 1).PackageFamilyNam
 Uninstall         : winget uninstall --id "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
 "@
         Write-Host
-    } else {
+    }
+    else {
         Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
         Sort-Object -Property DisplayName |
         Where-Object -FilterScript { $_.DisplayName -ne $null -and $_.SystemComponent -ne 1 } |
