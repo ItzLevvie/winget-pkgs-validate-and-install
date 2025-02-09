@@ -35,7 +35,7 @@ function Set-WindowsSettings {
 
 function Initialize-WinGet {
     $WINGET_COMMAND = Get-Command -CommandType Application -Name winget.exe
-    $WINGET_VERSION = (winget --version).TrimStart("v")
+    [System.Version]$WINGET_VERSION = (winget --version).TrimStart("v")
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION -lt "1.10.280") {
         Write-Host "Downloading WinGet..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250208.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
@@ -75,7 +75,7 @@ function Set-WinGetSettings {
 
 function Initialize-Git {
     $GIT_COMMAND = Get-Command -CommandType Application -Name git.exe
-    $GIT_VERSION = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
+    [System.Version]$GIT_VERSION = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
     if (-not($GIT_COMMAND) -or $GIT_VERSION -lt "2.48.0") {
         Write-Host "Downloading Git..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250208.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
