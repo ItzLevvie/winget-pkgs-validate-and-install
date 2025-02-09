@@ -159,6 +159,14 @@ function Read-PR {
 }
 
 function Start-WinGetValidation {
+    powershell Start-Process -FilePath powershell -ArgumentList "{ New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT ; Remove-Item -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Installer -Recurse -Force ; Remove-Item -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Installer -Recurse -Force ; Remove-Item -Path HKCU:\Software\Microsoft\Installer -Recurse -Force ; Remove-Item -Path HKCR:\Installer -Recurse -Force ; Remove-Item -Path @('HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall', 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall') -Recurse -Force }" -Verb runas -Wait
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host
+        Write-Host "This script requires you to accept UAC." -ForegroundColor Red
+        Write-Host
+        cmd /c pause
+        Request-PR
+    }
     $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
     [System.Int32]$WINGET_MANIFEST_FAILURE = -1978335191
