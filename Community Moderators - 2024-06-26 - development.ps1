@@ -36,7 +36,7 @@ function Set-WindowsSettings {
 }
 
 function Initialize-WinGet {
-    $WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
+    [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v")
     [System.Version]$WINGET_VERSION_MINIMUM = "1.10.280"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
@@ -54,7 +54,7 @@ function Initialize-WinGet {
 }
 
 function Set-WinGetSettings {
-    $WINGET_SETTINGS = Test-Path -Path $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json -PathType Leaf
+    [System.Boolean]$WINGET_SETTINGS = Test-Path -Path $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json -PathType Leaf
     [System.String]$SID_CURRENT = [System.Security.Principal.WindowsIdentity]::GetCurrent().Owner.Value
     [System.String]$SID_REQUIRED = "S-1-5-32-544"
     if (-not($WINGET_SETTINGS)) {
@@ -79,7 +79,7 @@ function Set-WinGetSettings {
 }
 
 function Initialize-Git {
-    $GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
+    [System.Boolean]$GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
     [System.Version]$GIT_VERSION_CURRENT = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
     [System.Version]$GIT_VERSION_MINIMUM = "2.48.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
