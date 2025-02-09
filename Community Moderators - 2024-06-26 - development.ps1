@@ -154,8 +154,17 @@ function Read-PR {
 function Start-WinGetValidation {
     $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
+    if ($LASTEXITCODE -eq -1978335191) {
+        Write-Host
+        cmd /c pause
+        Request-PR
+    }
     winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
-
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host
+        cmd /c pause
+        Request-PR
+    }
 }
 
 function Reset-Repository {
