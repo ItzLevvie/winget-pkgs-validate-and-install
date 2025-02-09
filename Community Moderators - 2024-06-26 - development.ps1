@@ -169,14 +169,16 @@ function Start-WinGetValidation {
 
 function Find-InstalledSoftware {
     $WINGET_SHOW_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim().Contains("Installer Type: msix")
+    $APPX_PACKAGE = Get-AppxPackage | Select-Object -Last 1
+    $APPX_PACKAGE_MANIFEST = (Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties
     if ($WINGET_SHOW_MSIX) {
         Write-Host
         Write-Host @"
-Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
-Publisher         : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.PublisherDisplayName)
-Version           : $((Get-AppxPackage | Select-Object -Last 1).Version)
-PackageFamilyName : $((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)
-Uninstall         : winget uninstall -id "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
+Name              : $($APPX_PACKAGE_MANIFEST.DisplayName)
+Publisher         : $($APPX_PACKAGE_MANIFEST.PublisherDisplayName)
+Version           : $($APPX_PACKAGE.Version)
+PackageFamilyName : $($APPX_PACKAGE.PackageFamilyName)
+Uninstall         : winget uninstall -id "$($APPX_PACKAGE.PackageFamilyName)"
 "@
         Write-Host
     }
