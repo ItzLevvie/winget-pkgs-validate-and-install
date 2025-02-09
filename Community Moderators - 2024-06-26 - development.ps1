@@ -4,11 +4,11 @@ $ProgressPreference = "SilentlyContinue"
 function Initialize-PSSession {
     Clear-Host
     [System.Int32]$CP_CURRENT = $OutputEncoding.CodePage
-    [System.Int32]$CP_MINIMUM = 65001
-    if ($CP_CURRENT -ne $CP_MINIMUM) {
+    [System.Int32]$CP_REQUIRED = 65001
+    if ($CP_CURRENT -ne $CP_REQUIRED) {
         $OutputEncoding = [System.Text.Encoding]::UTF8
     }
-    $PATH = "$env:SystemRoot\System32" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+    [System.String]$PATH = "$env:SystemRoot\System32" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
     if ($env:PATH -ne $PATH) {
         $env:PATH = $PATH
     }
@@ -36,7 +36,7 @@ function Set-WindowsSettings {
 }
 
 function Initialize-WinGet {
-    $WINGET_COMMAND = Get-Command -CommandType Application -Name winget.exe
+    $WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v")
     [System.Version]$WINGET_VERSION_MINIMUM = "1.10.280"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
@@ -55,8 +55,10 @@ function Initialize-WinGet {
 
 function Set-WinGetSettings {
     $WINGET_SETTINGS = Test-Path -Path $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json -PathType Leaf
+    [System.String]$SID_CURRENT = [System.Security.Principal.WindowsIdentity]::GetCurrent().Owner.Value
+    [System.String]$SID_REQUIRED = "S-1-5-32-544"
     if (-not($WINGET_SETTINGS)) {
-        if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Owner -eq "S-1-5-32-544") {
+        if ($SID_CURRENT -eq $SID_REQUIRED) {
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20240321.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
             winget settings --enable LocalManifestFiles
             winget settings --enable BypassCertificatePinningForMicrosoftStore
@@ -77,7 +79,7 @@ function Set-WinGetSettings {
 }
 
 function Initialize-Git {
-    $GIT_COMMAND = Get-Command -CommandType Application -Name git.exe
+    $GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
     [System.Version]$GIT_VERSION_CURRENT = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
     [System.Version]$GIT_VERSION_MINIMUM = "2.48.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
@@ -113,7 +115,7 @@ function Request-PR {
     Clear-Host
     $PR_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PR_NUMBER = $PR_NUMBER.Trim()
-    if ([String]::IsNullOrWhiteSpace($PR_NUMBER)) {
+    if ([System.String]::IsNullOrWhiteSpace($PR_NUMBER)) {
         Request-PR
     }
     elseif ($PR_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
@@ -158,7 +160,8 @@ function Read-PR {
 function Start-WinGetValidation {
     $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
-    if ($LASTEXITCODE -eq -1978335191) {
+    [System.Int32]$WINGET_MANIFEST_FAILURE = -1978335191
+    if ($LASTEXITCODE -eq $WINGET_MANIFEST_FAILURE) {
         Write-Host
         cmd /c pause
         Request-PR
@@ -173,7 +176,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    $WINGET_SHOW_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim().Contains("Installer Type: msix")
+    [System.Boolean]$WINGET_SHOW_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim().Contains("Installer Type: msix")
     $APPX_PACKAGE = Get-AppxPackage | Select-Object -Last 1
     $APPX_PACKAGE_MANIFEST = ($APPX_PACKAGE | Get-AppxPackageManifest).Package.Properties
     if ($WINGET_SHOW_MSIX) {
