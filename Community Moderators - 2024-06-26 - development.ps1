@@ -200,9 +200,9 @@ Uninstall     : winget uninstall --id "$($_.PSChildName)"
 "@
         }
         Write-Host
-        cmd /c pause
-        Request-PR
     }
+    cmd /c pause
+    Request-PR
 }
 
 function Reset-Repository {
