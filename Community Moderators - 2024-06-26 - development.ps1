@@ -94,6 +94,7 @@ function Initialize-Git {
 
 function Set-GitSettings {
     git config --global checkout.workers 0
+    git config --global fetch.parallel 0
     git config --global user.name $env:COMPUTERNAME
     git config --global user.email "$env:COMPUTERNAME.internal"
     Initialize-Repository
