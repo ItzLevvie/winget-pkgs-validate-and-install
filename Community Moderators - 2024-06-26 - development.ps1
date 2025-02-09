@@ -104,6 +104,7 @@ function Initialize-Repository {
     [System.Boolean]$REPOSITORY_DIRECTORY_GIT_FOLDER = Test-Path -Path $REPOSITORY_DIRECTORY\.git -PathType Container
     if (-not($REPOSITORY_DIRECTORY_GIT_FOLDER)) {
         Write-Host "Cloning the WinGet package repository..."
+        git config --global safe.directory $REPOSITORY_DIRECTORY.Replace("\", "/")
         git clone --no-checkout --sparse --branch master --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         Write-Host
