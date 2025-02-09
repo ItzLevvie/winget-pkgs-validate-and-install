@@ -183,7 +183,25 @@ Uninstall         : winget uninstall -id "$($APPX_PACKAGE.PackageFamilyName)"
         Write-Host
     }
     else {
-
+        Get-ItemProperty -Path @("HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*") |
+        Sort-Object -Property DisplayName |
+        Where-Object -FilterScript { $null -ne $_.DisplayName -and $_.SystemComponent -ne 1 } |
+        Select-Object -Property DisplayName, Publisher, DisplayVersion, PSChildName, PSDrive, PSPath |
+        ForEach-Object -Process {
+            Write-Host
+            Write-Host @"
+Name          : $($_.DisplayName)
+Publisher     : $($_.Publisher)
+Version       : $($_.DisplayVersion)
+ProductCode   : $($_.PSChildName)
+Scope         : $(($_.PSDrive.Name).Replace("HKLM", "Machine").Replace("HKCU", "User"))
+Registry Path : $(($_.PSPath).Replace("Microsoft.PowerShell.Core\Registry::", "Computer\"))
+Uninstall     : winget uninstall --id "$($_.PSChildName)"
+"@
+        }
+        Write-Host
+        cmd /c pause
+        Request-PR
     }
 }
 
