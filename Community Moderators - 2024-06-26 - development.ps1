@@ -3,8 +3,9 @@ $ProgressPreference = "SilentlyContinue"
 
 function Initialize-PSSession {
     Clear-Host
-    $CP = $OutputEncoding.CodePage
-    if ($CP -ne 65001) {
+    [System.Int32]$CP_CURRENT = $OutputEncoding.CodePage
+    [System.Int32]$CP_MINIMUM = 65001
+    if ($CP_CURRENT -ne $CP_MINIMUM) {
         $OutputEncoding = [System.Text.Encoding]::UTF8
     }
     $PATH = "$env:SystemRoot\System32" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
