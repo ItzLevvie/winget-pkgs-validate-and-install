@@ -167,6 +167,24 @@ function Start-WinGetValidation {
     }
 }
 
+function Find-InstalledSoftware {
+    $WINGET_SHOW_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim().Contains("Installer Type: msix")
+    if ($WINGET_SHOW_MSIX) {
+        Write-Host
+        Write-Host @"
+Name              : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.DisplayName)
+Publisher         : $((Get-AppxPackage | Select-Object -Last 1 | Get-AppxPackageManifest).Package.Properties.PublisherDisplayName)
+Version           : $((Get-AppxPackage | Select-Object -Last 1).Version)
+PackageFamilyName : $((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)
+Uninstall         : winget uninstall -id "$((Get-AppxPackage | Select-Object -Last 1).PackageFamilyName)"
+"@
+        Write-Host
+    }
+    else {
+
+    }
+}
+
 function Reset-Repository {
     git -C $REPOSITORY_DIRECTORY fetch --no-write-fetch-head --force upstream master
     git -C $REPOSITORY_DIRECTORY reset --hard upstream/master
