@@ -15,8 +15,9 @@ function Initialize-PSSession {
 }
 
 function Find-OSBuild {
-    $OS_BUILD = (Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart
-    if ($OS_BUILD -lt 19045) {
+    [System.Int32]$OS_BUILD_CURRENT = (Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart
+    [System.Int32]$OS_BUILD_MINIMUM = 19045
+    if ($OS_BUILD_CURRENT -lt $OS_BUILD_MINIMUM) {
         Write-Host "This script requires Windows 10 version 22H2 or later to run." -ForegroundColor Red
         Write-Host
         cmd /c pause
@@ -35,8 +36,9 @@ function Set-WindowsSettings {
 
 function Initialize-WinGet {
     $WINGET_COMMAND = Get-Command -CommandType Application -Name winget.exe
-    [System.Version]$WINGET_VERSION = (winget --version).TrimStart("v")
-    if (-not($WINGET_COMMAND) -or $WINGET_VERSION -lt [System.Version]"1.10.280") {
+    [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v")
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.10.280"
+    if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250208.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250208.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
@@ -75,8 +77,9 @@ function Set-WinGetSettings {
 
 function Initialize-Git {
     $GIT_COMMAND = Get-Command -CommandType Application -Name git.exe
-    [System.Version]$GIT_VERSION = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
-    if (-not($GIT_COMMAND) -or $GIT_VERSION -lt [System.Version]"2.48.0") {
+    [System.Version]$GIT_VERSION_CURRENT = (git version).TrimStart("git version").Split(".")[0] + "." + (git version).TrimStart("git version").Split(".")[1] + "." + (git version).TrimStart("git version").Split(".")[2]
+    [System.Version]$GIT_VERSION_MINIMUM = "2.48.0"
+    if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250208.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
         Write-Host "Installing Git..."
