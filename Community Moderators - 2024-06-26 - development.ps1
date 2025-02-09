@@ -165,6 +165,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
+    Find-InstalledSoftware
 }
 
 function Find-InstalledSoftware {
