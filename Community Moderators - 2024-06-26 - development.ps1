@@ -7,7 +7,7 @@ function Initialize-PSSession {
     if ($CP -ne 65001) {
         $OutputEncoding = [System.Text.Encoding]::UTF8
     }
-    $PATH = "$env:SystemRoot\System32" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd"
+    $PATH = "$env:SystemRoot\System32" + ";" + "$env:LOCALAPPDATA\Microsoft\WindowsApps" + ";" + "$env:ProgramFiles\Git\cmd" + ";" + "$env:LOCALAPPDATA\Microsoft\WinGet\Links"
     if ($env:PATH -ne $PATH) {
         $env:PATH = $PATH
     }
@@ -148,6 +148,14 @@ function Read-PR {
         cmd /c pause
         Request-PR
     }
+    Start-WinGetValidation
+}
+
+function Start-WinGetValidation {
+    $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
+    winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
+    winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
+
 }
 
 function Reset-Repository {
