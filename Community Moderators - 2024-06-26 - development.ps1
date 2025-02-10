@@ -245,4 +245,8 @@ function Reset-Repository {
     git -C $REPOSITORY_DIRECTORY reset --hard upstream/master
 }
 
+function Update-Path {
+    $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine) + ";" + [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+}
+
 Initialize-PSSession
