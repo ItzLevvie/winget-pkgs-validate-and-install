@@ -28,9 +28,24 @@ function Find-OSBuild {
 }
 
 function Set-WindowsSettings {
-    $SmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer).SmartScreenEnabled
-    if ($SmartScreen -ne "Off") {
-        New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name SmartScreenEnabled -Value Off -Force
+    [System.String]$SID_CURRENT = [System.Security.Principal.WindowsIdentity]::GetCurrent().Owner.Value
+    [System.String]$SID_REQUIRED = "S-1-5-32-544"
+    if ($SID_CURRENT -eq $SID_REQUIRED) {
+        $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
+        if ($EnableSmartScreen -ne 0) {
+            New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
+        }
+        $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
+        if ($LowRiskFileTypes -ne ".exe;.msi") {
+            New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Force
+            New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
+        }
+    }
+    else {
+        Write-Host "This script requires administrator privileges to configure Windows for the first time." -ForegroundColor Red
+        Write-Host
+        cmd /c pause
+        break
     }
     Initialize-WinGet
 }
@@ -69,7 +84,7 @@ function Set-WinGetSettings {
             winget source update --name winget
         }
         else {
-            Write-Host "This script requires administrator privileges to initialize WinGet for the first time." -ForegroundColor Red
+            Write-Host "This script requires administrator privileges to configure WinGet for the first time." -ForegroundColor Red
             Write-Host
             cmd /c pause
             break
