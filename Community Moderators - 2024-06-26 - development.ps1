@@ -193,7 +193,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
-    winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
+    winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH --accept-source-agreements
     if ($LASTEXITCODE -ne 0) {
         Write-Host
         cmd /c pause
