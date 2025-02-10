@@ -199,6 +199,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
+    Update-Path
     Find-InstalledSoftware
 }
 
