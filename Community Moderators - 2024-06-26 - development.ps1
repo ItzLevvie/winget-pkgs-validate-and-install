@@ -8,7 +8,7 @@ function Initialize-PSSession {
     if ($CP_CURRENT -ne $CP_REQUIRED) {
         $OutputEncoding = [System.Text.Encoding]::UTF8
     }
-    [System.String]$PATH = "$env:SystemRoot\System32;$env:SystemRoot\System32\WindowsPowerShell\v1.0;$env:LOCALAPPDATA\Microsoft\WindowsApps;$env:ProgramFiles\Git\cmd;$env:LOCALAPPDATA\Microsoft\WinGet\Links"
+    [System.String]$PATH = "$env:SystemRoot\System32;$env:SystemRoot\System32\WindowsPowerShell\v1.0;$env:LOCALAPPDATA\Microsoft\WindowsApps;$env:ProgramFiles\Git\cmd"
     if ($env:PATH -ne $PATH) {
         $env:PATH = $PATH
     }
