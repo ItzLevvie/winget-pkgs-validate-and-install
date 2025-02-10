@@ -149,7 +149,8 @@ function Read-PR {
         Request-PR
     }
     git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY
-    git -C $REPOSITORY_DIRECTORY pull --no-edit --force upstream refs/pull/$PR_NUMBER/head
+    # git -C $REPOSITORY_DIRECTORY pull --no-edit --force upstream refs/pull/$PR_NUMBER/head
+    git -C $REPOSITORY_DIRECTORY merge --no-edit FETCH_HEAD
     if ($LASTEXITCODE -eq 1) {
         Write-Host
         Write-Host "This script requires the pull request to be valid and have no merge conflicts." -ForegroundColor Red
