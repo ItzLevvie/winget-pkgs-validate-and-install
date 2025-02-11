@@ -186,6 +186,7 @@ function Start-WinGetValidation {
         Request-PR
     }
     $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
+    Write-Host
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
     [System.Int32]$WINGET_MANIFEST_FAILURE = -1978335191
     if ($LASTEXITCODE -eq $WINGET_MANIFEST_FAILURE) {
