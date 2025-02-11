@@ -201,9 +201,9 @@ function Start-WinGetValidation {
         $WINGET_TEMP_PACKAGE_DIRECTORY = ($PACKAGE_VERSION_DIRECTORY -replace "^manifests\/[a-z0-9]\/", "").Replace("/", ".")
         $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
         $WINGET_TEMP_PACKAGE_DIRECTORY_HASH = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH).Hash
-        $WINGET_INSTALLER_HASH_FAILURE = ($WINGET_SHOW -match "^Installer SHA256: ").Trim("Installer SHA256:").ToUpper()
+        $WINGET_SHOW_HASH = ($WINGET_SHOW -match "^Installer SHA256: ").Trim("Installer SHA256:").ToUpper()
         Write-Host
-        Write-Host "InstallerSha256: $WINGET_INSTALLER_HASH_FAILURE" -ForegroundColor Red
+        Write-Host "InstallerSha256: $WINGET_SHOW_HASH" -ForegroundColor Red
         Write-Host "InstallerSha256: $WINGET_TEMP_PACKAGE_DIRECTORY_HASH" -ForegroundColor Green
         Write-Host
         cmd /c pause
