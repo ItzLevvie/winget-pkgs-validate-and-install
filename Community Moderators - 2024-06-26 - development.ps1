@@ -205,8 +205,6 @@ function Start-WinGetValidation {
         # Actual
         $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
         $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2 = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
-
-        $WINGET_SHOW_HASH = ($WINGET_SHOW -match "^Installer SHA256: ").Trim("Installer SHA256: ").ToUpper()
         
         Write-Host
         Write-Host "InstallerSha256: $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1" -ForegroundColor Red
