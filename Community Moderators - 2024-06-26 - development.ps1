@@ -207,8 +207,8 @@ function Start-WinGetValidation {
         $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2 = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
         
         Write-Host
-        Write-Host "InstallerSha256 (expected): $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1" -ForegroundColor Red
-        Write-Host "InstallerSha256 (actual)  : $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2" -ForegroundColor Green
+        Write-Host "InstallerSha256 (expected) : $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1" -ForegroundColor Red
+        Write-Host "InstallerSha256 (actual)   : $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2" -ForegroundColor Green
         Write-Host
         cmd /c pause
         Request-PR
