@@ -193,8 +193,23 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
+    $WINGET_SHOW = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim()
     winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH --accept-package-agreements
-    if ($LASTEXITCODE -ne 0) {
+    [System.Int32]$WINGET_INSTALL_HASH_MISMATCH = -1978335215
+    if ($LASTEXITCODE -eq $WINGET_INSTALL_HASH_MISMATCH) {
+        $WINGET_TEMP_DIRECTORY = "$env:LOCALAPPDATA\Temp\WinGet"
+        $WINGET_TEMP_PACKAGE_DIRECTORY = ($PACKAGE_VERSION_DIRECTORY -replace "^manifests\/[a-z0-9]\/", "").Replace("/", ".")
+        $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
+        $WINGET_TEMP_PACKAGE_DIRECTORY_HASH = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH).Hash
+        $WINGET_INSTALLER_HASH_FAILURE = ($WINGET_SHOW -match "^Installer SHA256: ").Trim("Installer SHA256:").ToUpper()
+        Write-Host
+        Write-Host "InstallerSha256: $WINGET_INSTALLER_HASH_FAILURE" -ForegroundColor Red
+        Write-Host "InstallerSha256: $WINGET_TEMP_PACKAGE_DIRECTORY_HASH" -ForegroundColor Green
+        Write-Host
+        cmd /c pause
+        Request-PR
+    }
+    else {
         Write-Host
         cmd /c pause
         Request-PR
@@ -204,7 +219,7 @@ function Start-WinGetValidation {
 }
 
 function Find-InstalledSoftware {
-    [System.Boolean]$WINGET_SHOW_MSIX = (winget show --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH).Trim().Contains("Installer Type: msix")
+    [System.Boolean]$WINGET_SHOW_MSIX = $WINGET_SHOW.Contains("Installer Type: msix")
     if ($WINGET_SHOW_MSIX) {
         $APPX_PACKAGE = Get-AppxPackage -PackageTypeFilter Main | Select-Object -Last 1
         $APPX_PACKAGE_MANIFEST = ($APPX_PACKAGE | Get-AppxPackageManifest).Package.Properties
