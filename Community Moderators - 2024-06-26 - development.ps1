@@ -130,20 +130,20 @@ function Initialize-Repository {
 
 function Request-PR {
     Reset-Repository
-    Clear-Host
     $PR_NUMBER = Read-Host -Prompt "Enter a pull request number"
     $PR_NUMBER = $PR_NUMBER.Trim()
-    if ([System.String]::IsNullOrWhiteSpace($PR_NUMBER)) {
-        Request-PR
+    if ($PR_NUMBER -match "^\d+$") {}
+    elseif ($PR_NUMBER -match "^#\d+$") {
+        $PR_NUMBER = $PR_NUMBER.TrimStart("#")
     }
-    elseif ($PR_NUMBER.StartsWith("https://github.com/microsoft/winget-pkgs/pull/")) {
+    elseif ($PR_NUMBER -match "^pull\/\d+$") {
+        $PR_NUMBER = $PR_NUMBER.TrimStart("pull/")
+    }
+    elseif ($PR_NUMBER -match "^https:\/\/github\.com\/microsoft\/winget-pkgs\/pull\/\d+") {
         $PR_NUMBER = $PR_NUMBER.TrimStart("https://github.com/microsoft/winget-pkgs/pull/").TrimEnd("/files")
     }
-    elseif ($PR_NUMBER.StartsWith("pull/")) {
-        $PR_NUMBER = $PR_NUMBER.TrimStart("pull/").TrimEnd("/files")
-    }
-    elseif ($PR_NUMBER.StartsWith("#")) {
-        $PR_NUMBER = $PR_NUMBER.TrimStart("#")
+    else {
+        Request-PR
     }
     Get-PR
 }
