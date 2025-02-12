@@ -200,15 +200,15 @@ function Start-WinGetValidation {
         [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY = ($PACKAGE_VERSION_DIRECTORY -replace "^manifests\/[a-z0-9]\/", "").Replace("/", ".")
 
         # Expected
-        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).Name.ToUpper()
+        [System.String]$WINGET_INSTALL_EXPECTED_HASH = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).Name.ToUpper()
 
         # Actual
         [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
-        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2 = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
+        [System.String]$WINGET_INSTALL_ACTUAL_HASH = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
 
         Write-Host
-        Write-Host "InstallerSha256 (expected) : $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1" -ForegroundColor Red
-        Write-Host "InstallerSha256 (actual)   : $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2" -ForegroundColor Green
+        Write-Host "InstallerSha256 (expected) : $WINGET_INSTALL_EXPECTED_HASH" -ForegroundColor Red
+        Write-Host "InstallerSha256 (actual)   : $WINGET_INSTALL_ACTUAL_HASH" -ForegroundColor Green
         Write-Host
         cmd /c pause
         Request-PR
