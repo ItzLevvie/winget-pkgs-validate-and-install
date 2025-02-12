@@ -207,7 +207,7 @@ function Start-WinGetValidation {
         [System.String]$WINGET_INSTALL_ACTUAL_HASH = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
 
         Write-Host
-        Write-Host "InstallerSha256 (expected) : $WINGET_INSTALL_EXPECTED_HASH" -ForegroundColor Red
+        Write-Host "InstallerSha256 (expected) : $WINGET_INSTALL_EXPECTED_HASH" -ForegroundColor DarkRed
         Write-Host "InstallerSha256 (actual)   : $WINGET_INSTALL_ACTUAL_HASH" -ForegroundColor Green
         Write-Host
         cmd /c pause
