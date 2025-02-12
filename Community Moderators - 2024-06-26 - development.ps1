@@ -2,7 +2,6 @@ $ErrorActionPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
 
 function Initialize-PSSession {
-    Clear-Host
     [System.Int32]$CP_CURRENT = $OutputEncoding.CodePage
     [System.Int32]$CP_REQUIRED = 65001
     if ($CP_CURRENT -ne $CP_REQUIRED) {
@@ -185,7 +184,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
-    $PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
+    [System.String]$PACKAGE_VERSION_DIRECTORY_FULL_PATH = $REPOSITORY_DIRECTORY + "\" + $PACKAGE_VERSION_DIRECTORY.Replace("/", "\")
     Write-Host
     winget validate --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH
     [System.Int32]$WINGET_MANIFEST_FAILURE = -1978335191
