@@ -163,7 +163,7 @@ function Read-PR {
         Request-PR
     }
     git -C $REPOSITORY_DIRECTORY sparse-checkout set $PACKAGE_VERSION_DIRECTORY
-    # git -C $REPOSITORY_DIRECTORY pull --no-edit --force upstream refs/pull/$PR_NUMBER/head
+    #git -C $REPOSITORY_DIRECTORY pull --no-edit --force upstream refs/pull/$PR_NUMBER/head
     git -C $REPOSITORY_DIRECTORY merge --no-edit FETCH_HEAD
     if ($LASTEXITCODE -eq 1) {
         Write-Host
@@ -196,15 +196,15 @@ function Start-WinGetValidation {
     winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH --accept-package-agreements
     [System.Int32]$WINGET_INSTALL_HASH_MISMATCH = -1978335215
     if ($LASTEXITCODE -eq $WINGET_INSTALL_HASH_MISMATCH) {
-        $WINGET_TEMP_DIRECTORY = "$env:LOCALAPPDATA\Temp\WinGet"
-        $WINGET_TEMP_PACKAGE_DIRECTORY = ($PACKAGE_VERSION_DIRECTORY -replace "^manifests\/[a-z0-9]\/", "").Replace("/", ".")
+        [System.String]$WINGET_TEMP_DIRECTORY = "$env:LOCALAPPDATA\Temp\WinGet"
+        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY = ($PACKAGE_VERSION_DIRECTORY -replace "^manifests\/[a-z0-9]\/", "").Replace("/", ".")
 
         # Expected
-        $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).Name.ToUpper()
+        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).Name.ToUpper()
 
         # Actual
-        $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
-        $WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2 = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
+        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2 = (Get-ChildItem -Path $WINGET_TEMP_DIRECTORY\$WINGET_TEMP_PACKAGE_DIRECTORY | Sort-Object -Property LastWriteTime | Select-Object -Last 1).FullName
+        [System.String]$WINGET_TEMP_PACKAGE_DIRECTORY_HASH_2 = (Get-FileHash -Path $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_2).Hash
 
         Write-Host
         Write-Host "InstallerSha256 (expected) : $WINGET_TEMP_PACKAGE_DIRECTORY_FULL_PATH_1" -ForegroundColor Red
