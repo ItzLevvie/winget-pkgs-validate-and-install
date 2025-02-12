@@ -214,7 +214,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
-    else {
+    elseif ($LASTEXITCODE -ne 0) {
         Write-Host
         cmd /c pause
         Request-PR
