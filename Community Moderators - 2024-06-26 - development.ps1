@@ -15,7 +15,7 @@ function Initialize-PSSession {
 }
 
 function Find-OSBuild {
-    [System.Int32]$OS_BUILD_CURRENT = (Get-ItemProperty -Path $env:SystemRoot\System32\ntoskrnl.exe).VersionInfo.ProductBuildPart
+    [System.Int32]$OS_BUILD_CURRENT = [System.Environment]::OSVersion.Version.Build
     [System.Int32]$OS_BUILD_MINIMUM = 19045
     if ($OS_BUILD_CURRENT -lt $OS_BUILD_MINIMUM) {
         Write-Host "This script requires Windows 10 version 22H2 or later to run." -ForegroundColor Red
