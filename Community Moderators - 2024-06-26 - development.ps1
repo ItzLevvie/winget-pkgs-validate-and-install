@@ -40,6 +40,11 @@ function Set-WindowsSettings {
             New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations
             New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
         }
+        $AllowDevelopmentWithoutDevLicense = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock).AllowDevelopmentWithoutDevLicense
+        if ($AllowDevelopmentWithoutDevLicense -ne 1) {
+            New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+            New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
+        }
         $fDenyTSConnections = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services").fDenyTSConnections
         if ($fDenyTSConnections -ne 0) {
             New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
