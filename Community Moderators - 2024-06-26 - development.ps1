@@ -32,7 +32,7 @@ function Set-WindowsSettings {
     if ($SID_CURRENT -eq $SID_REQUIRED) {
         $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
         if ($EnableSmartScreen -ne 0) {
-            New-Item -Path -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+            New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
             New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
         }
         $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
