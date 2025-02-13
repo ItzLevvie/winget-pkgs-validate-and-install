@@ -32,12 +32,23 @@ function Set-WindowsSettings {
     if ($SID_CURRENT -eq $SID_REQUIRED) {
         $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
         if ($EnableSmartScreen -ne 0) {
+            New-Item -Path -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
             New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
         }
         $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
         if ($LowRiskFileTypes -ne ".exe;.msi") {
-            New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Force
+            New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations
             New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
+        }
+        $fDenyTSConnections = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services").fDenyTSConnections
+        if ($fDenyTSConnections -ne 0) {
+            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+            New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name fDenyTSConnections -Value 0 -Force
+        }
+        $LimitBlankPasswordUse = (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa).LimitBlankPasswordUse
+        if ($LimitBlankPasswordUse -ne 0) {
+            New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+            New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa -Name LimitBlankPasswordUse -Value 0 -Force
         }
     }
     else {
