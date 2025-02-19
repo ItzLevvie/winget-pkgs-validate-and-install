@@ -27,40 +27,44 @@ function Find-OSBuild {
 }
 
 function Set-WindowsSettings {
+    [System.Boolean]$SETTINGS_CHECK = Test-Path -Path $env:TEMP\$env:COMPUTERNAME.internal -PathType Leaf
     [System.String]$SID_CURRENT = [System.Security.Principal.WindowsIdentity]::GetCurrent().Owner.Value
     [System.String]$SID_REQUIRED = "S-1-5-32-544"
-    if ($SID_CURRENT -eq $SID_REQUIRED) {
-        $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
-        if ($EnableSmartScreen -ne 0) {
-            New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-            New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
+    if (-not($SETTINGS_CHECK)) {
+        if ($SID_CURRENT -eq $SID_REQUIRED) {
+            $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
+            if ($EnableSmartScreen -ne 0) {
+                New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+                New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
+            }
+            $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
+            if ($LowRiskFileTypes -ne ".exe;.msi") {
+                New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations
+                New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
+            }
+            $AllowDevelopmentWithoutDevLicense = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock).AllowDevelopmentWithoutDevLicense
+            if ($AllowDevelopmentWithoutDevLicense -ne 1) {
+                New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
+                New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
+            }
+            $fDenyTSConnections = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services").fDenyTSConnections
+            if ($fDenyTSConnections -ne 0) {
+                New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+                New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name fDenyTSConnections -Value 0 -Force
+            }
+            $LimitBlankPasswordUse = (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa).LimitBlankPasswordUse
+            if ($LimitBlankPasswordUse -ne 0) {
+                New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+                New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa -Name LimitBlankPasswordUse -Value 0 -Force
+            }
+            New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
         }
-        $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
-        if ($LowRiskFileTypes -ne ".exe;.msi") {
-            New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations
-            New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
+        else {
+            Write-Host "This script requires administrator privileges to configure Windows for the first time." -ForegroundColor Red
+            Write-Host
+            cmd /c pause
+            break
         }
-        $AllowDevelopmentWithoutDevLicense = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock).AllowDevelopmentWithoutDevLicense
-        if ($AllowDevelopmentWithoutDevLicense -ne 1) {
-            New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
-            New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
-        }
-        $fDenyTSConnections = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services").fDenyTSConnections
-        if ($fDenyTSConnections -ne 0) {
-            New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
-            New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name fDenyTSConnections -Value 0 -Force
-        }
-        $LimitBlankPasswordUse = (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa).LimitBlankPasswordUse
-        if ($LimitBlankPasswordUse -ne 0) {
-            New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-            New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa -Name LimitBlankPasswordUse -Value 0 -Force
-        }
-    }
-    else {
-        Write-Host "This script requires administrator privileges to configure Windows for the first time." -ForegroundColor Red
-        Write-Host
-        cmd /c pause
-        break
     }
     Initialize-WinGet
 }
