@@ -72,12 +72,12 @@ function Set-WindowsSettings {
 function Initialize-WinGet {
     [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v").TrimEnd("-preview")
-    [System.Version]$WINGET_VERSION_MINIMUM = "1.10.300"
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.10.320"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250220.1/Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250220.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250220.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250223.1/Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250223.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250223.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         Write-Host "Installing WinGet..."
         Add-AppxPackage -Path $env:TEMP\Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
         Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
@@ -93,7 +93,7 @@ function Set-WinGetSettings {
     [System.String]$SID_REQUIRED = "S-1-5-32-544"
     if (-not($WINGET_SETTINGS)) {
         if ($SID_CURRENT -eq $SID_REQUIRED) {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250220.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250223.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
             winget settings --enable LocalManifestFiles
             winget settings --enable BypassCertificatePinningForMicrosoftStore
             winget settings --enable InstallerHashOverride
@@ -119,7 +119,7 @@ function Initialize-Git {
     [System.Version]$GIT_VERSION_MINIMUM = "2.48.1"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250220.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250223.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
         Write-Host "Installing Git..."
         Start-Process -FilePath $env:TEMP\Git-64-bit.exe -ArgumentList "/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
         Write-Host
