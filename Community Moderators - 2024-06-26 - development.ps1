@@ -62,7 +62,7 @@ function Set-WindowsSettings {
 function Initialize-WinGet {
     [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v").TrimEnd("-preview")
-    [System.Version]$WINGET_VERSION_MINIMUM = "1.10.320"
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.11.180"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250331.1/Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.UI.Xaml.2.8_x64_8wekyb3d8bbwe.appx
@@ -106,7 +106,7 @@ function Initialize-Git {
     [System.Boolean]$GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
     [System.String]$GIT_VERSION_COMMAND = git version
     [System.Version]$GIT_VERSION_CURRENT = $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[0] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[1] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[2]
-    [System.Version]$GIT_VERSION_MINIMUM = "2.48.1"
+    [System.Version]$GIT_VERSION_MINIMUM = "2.49.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250331.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
