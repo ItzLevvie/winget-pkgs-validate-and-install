@@ -47,16 +47,6 @@ function Set-WindowsSettings {
                 New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
                 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
             }
-            $fDenyTSConnections = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services").fDenyTSConnections
-            if ($fDenyTSConnections -ne 0) {
-                New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
-                New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name fDenyTSConnections -Value 0 -Force
-            }
-            $LimitBlankPasswordUse = (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa).LimitBlankPasswordUse
-            if ($LimitBlankPasswordUse -ne 0) {
-                New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-                New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\Lsa -Name LimitBlankPasswordUse -Value 0 -Force
-            }
             New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
         }
         else {
