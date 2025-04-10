@@ -1,0 +1,17 @@
+{
+    "source": {
+        "autoUpdateIntervalInMinutes": 0
+    },
+    "visual": {
+        "progressBar": "rainbow",
+        "anonymizeDisplayedPaths": false
+    },
+    "logging": {
+        "level": "verbose"
+    },
+    "network": {
+        "downloader": "wininet"
+    },
+    "experimentalFeatures": {
+    }
+}
