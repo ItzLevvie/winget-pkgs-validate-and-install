@@ -109,9 +109,19 @@ function Initialize-Git {
     [System.Version]$GIT_VERSION_MINIMUM = "2.49.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250410.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250410.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
+        }
+        elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250410.1/Git-arm64.exe -OutFile $env:TEMP\Git-arm64.exe
+        }
         Write-Host "Installing Git..."
-        Start-Process -FilePath $env:TEMP\Git-64-bit.exe -ArgumentList "/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
+        if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
+            Start-Process -FilePath $env:TEMP\Git-64-bit.exe -ArgumentList "/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
+        }
+        elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
+            Start-Process -FilePath $env:TEMP\Git-arm64.exe -ArgumentList "/SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
+        }
         Write-Host
     }
     Set-GitSettings
