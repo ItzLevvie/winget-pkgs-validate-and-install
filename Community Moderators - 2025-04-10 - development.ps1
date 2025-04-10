@@ -226,7 +226,7 @@ function Start-WinGetValidation {
         cmd /c pause
         Request-PR
     }
-    winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH --accept-package-agreements
+    winget install --manifest $PACKAGE_VERSION_DIRECTORY_FULL_PATH --ignore-local-archive-malware-scan --accept-package-agreements
     [System.Int32]$WINGET_INSTALL_HASH_MISMATCH = -1978335215
     if ($LASTEXITCODE -eq $WINGET_INSTALL_HASH_MISMATCH) {
         [System.String]$WINGET_TEMP_DIRECTORY = "$env:LOCALAPPDATA\Temp\WinGet"
