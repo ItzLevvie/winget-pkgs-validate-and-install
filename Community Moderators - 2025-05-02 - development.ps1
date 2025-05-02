@@ -39,17 +39,17 @@ function Set-WindowsSettings {
             $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
             if ($EnableSmartScreen -ne 0) {
                 New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-                New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -Name EnableSmartScreen -Value 0 -Force
+                New-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System -PropertyType DWord -Name EnableSmartScreen -Value 0 -Force
             }
             $LowRiskFileTypes = (Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations).LowRiskFileTypes
             if ($LowRiskFileTypes -ne ".exe;.msi") {
                 New-Item -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations
-                New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -Name LowRiskFileTypes -Value ".exe;.msi" -Force
+                New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations -PropertyType String -Name LowRiskFileTypes -Value ".exe;.msi" -Force
             }
             $AllowDevelopmentWithoutDevLicense = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock).AllowDevelopmentWithoutDevLicense
             if ($AllowDevelopmentWithoutDevLicense -ne 1) {
                 New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
-                New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
+                New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -PropertyType DWord -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
             }
             New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
         }
