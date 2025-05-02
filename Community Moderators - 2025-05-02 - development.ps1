@@ -34,6 +34,8 @@ function Set-WindowsSettings {
     [System.String]$SID_REQUIRED = "S-1-5-32-544"
     if (-not($SETTINGS_CHECK)) {
         if ($SID_CURRENT -eq $SID_REQUIRED) {
+            netsh advfirewall set allprofiles state off
+            powercfg /setactive e9a42b02-d5df-448d-aa00-03f14749eb61
             $EnableSmartScreen = (Get-ItemProperty -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System).EnableSmartScreen
             if ($EnableSmartScreen -ne 0) {
                 New-Item -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
