@@ -192,6 +192,13 @@ function Get-PR {
 
 function Read-PR {
     $PACKAGE_VERSION_DIRECTORY = (git -C $REPOSITORY_DIRECTORY diff --dirstat=files --diff-filter=d upstream/master...FETCH_HEAD).TrimStart(" 100.0% ").TrimEnd("/")
+    if ($PACKAGE_VERSION_DIRECTORY -notmatch "^manifests\/[a-z0-9]\/") {
+        Write-Host
+        Write-Host "This script requires the pull request to contain a valid package." -ForegroundColor Red
+        Write-Host
+        cmd /c pause
+        Request-PR
+    }
     if ($PACKAGE_VERSION_DIRECTORY.GetType().Name -eq "Object[]") {
         Write-Host
         Write-Host "This script requires the pull request to have only one package." -ForegroundColor Red
