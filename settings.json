@@ -15,6 +15,9 @@
     "network": {
         "downloader": "wininet"
     },
+    "interactivity": {
+        "disable": true
+    },
     "experimentalFeatures": {
     }
 }
