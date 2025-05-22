@@ -9,6 +9,9 @@
     "logging": {
         "level": "verbose"
     },
+    "installBehavior": {
+        "archiveExtractionMethod": "tar"
+    },
     "network": {
         "downloader": "wininet"
     },
