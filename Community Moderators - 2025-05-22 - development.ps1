@@ -51,6 +51,11 @@ function Set-WindowsSettings {
                 New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock
                 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock -PropertyType DWord -Name AllowDevelopmentWithoutDevLicense -Value 1 -Force
             }
+            $LongPathsEnabled = (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem).LongPathsEnabled
+            if ($LongPathsEnabled -ne 1) {
+                New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem
+                New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -PropertyType DWord -Name LongPathsEnabled -Value 1 -Force
+            }
             New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
         }
         else {
