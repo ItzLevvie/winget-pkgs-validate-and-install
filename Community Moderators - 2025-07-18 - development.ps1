@@ -56,7 +56,6 @@ function Set-WindowsSettings {
                 New-Item -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem
                 New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -PropertyType DWord -Name LongPathsEnabled -Value 1 -Force
             }
-            New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
         }
         else {
             Write-Host "This script requires administrator privileges to configure Windows for the first time." -ForegroundColor Red
@@ -149,11 +148,14 @@ function Initialize-Git {
 }
 
 function Set-GitSettings {
-    git config --global checkout.workers 0
-    git config --global fetch.parallel 0
-    git config --global core.quotePath false
-    git config --global user.name $env:COMPUTERNAME
-    git config --global user.email "$env:COMPUTERNAME.internal"
+    if (-not($SETTINGS_CHECK)) {
+        git config --global checkout.workers 0
+        git config --global fetch.parallel 0
+        git config --global core.quotePath false
+        git config --global user.name $env:COMPUTERNAME
+        git config --global user.email "$env:COMPUTERNAME.internal"
+        New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
+    }
     Initialize-Repository
 }
 
