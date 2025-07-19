@@ -1,0 +1,23 @@
+{
+    "source": {
+        "autoUpdateIntervalInMinutes": 0
+    },
+    "visual": {
+        "progressBar": "rainbow",
+        "anonymizeDisplayedPaths": false
+    },
+    "logging": {
+        "level": "verbose"
+    },
+    "installBehavior": {
+        "archiveExtractionMethod": "tar"
+    },
+    "network": {
+        "downloader": "wininet"
+    },
+    "interactivity": {
+        "disable": true
+    },
+    "experimentalFeatures": {
+    }
+}
