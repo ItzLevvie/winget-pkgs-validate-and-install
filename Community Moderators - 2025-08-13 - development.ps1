@@ -70,7 +70,7 @@ function Set-WindowsSettings {
 function Initialize-WinGet {
     [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v").TrimEnd("-preview")
-    [System.Version]$WINGET_VERSION_MINIMUM = "1.11.400"
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.11.430"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
@@ -126,7 +126,7 @@ function Initialize-Git {
     [System.Boolean]$GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
     [System.String]$GIT_VERSION_COMMAND = git version
     [System.Version]$GIT_VERSION_CURRENT = $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[0] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[1] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[2]
-    [System.Version]$GIT_VERSION_MINIMUM = "2.50.1"
+    [System.Version]$GIT_VERSION_MINIMUM = "2.51.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
