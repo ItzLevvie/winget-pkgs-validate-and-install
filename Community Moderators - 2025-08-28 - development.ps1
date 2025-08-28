@@ -75,26 +75,26 @@ function Initialize-WinGet {
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.WindowsAppRuntime.1.7_x64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.7_x64_8wekyb3d8bbwe.msix
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx
         }
         elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx
             Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.WindowsAppRuntime.1.7_arm64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.7_arm64_8wekyb3d8bbwe.msix
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx
         }
         Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20250828.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         Write-Host "Installing WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
-            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
             Add-AppxPackage -Path $env:TEMP\Microsoft.WindowsAppRuntime.1.7_x64_8wekyb3d8bbwe.msix -DeferRegistrationWhenPackagesAreInUse
+            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
+            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
         }
         elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
-            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
             Add-AppxPackage -Path $env:TEMP\Microsoft.WindowsAppRuntime.1.7_arm64_8wekyb3d8bbwe.msix -DeferRegistrationWhenPackagesAreInUse
+            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
+            Add-AppxPackage -Path $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -DeferRegistrationWhenPackagesAreInUse
         }
         Add-AppxPackage -Path $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -ForceApplicationShutdown
         Write-Host
