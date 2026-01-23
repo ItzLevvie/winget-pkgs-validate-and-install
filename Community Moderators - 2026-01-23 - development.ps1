@@ -71,7 +71,7 @@ function Set-WindowsSettings {
 function Initialize-WinGet {
     [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v").TrimEnd("-preview")
-    [System.Version]$WINGET_VERSION_MINIMUM = "1.12.210"
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.28.90"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
