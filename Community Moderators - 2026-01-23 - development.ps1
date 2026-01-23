@@ -115,6 +115,7 @@ function Set-WinGetSettings {
             winget settings --enable LocalArchiveMalwareScanOverride
             winget settings --enable ProxyCommandLineOptions
             winget source remove --name msstore
+            winget source remove --name winget-font
             winget source update --name winget
         }
         else {
