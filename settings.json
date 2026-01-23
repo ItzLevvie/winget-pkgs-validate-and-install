@@ -7,7 +7,10 @@
         "anonymizeDisplayedPaths": false
     },
     "logging": {
-        "level": "verbose"
+        "level": "verbose",
+        "file": {
+            "ageLimitInDays": 1
+        }
     },
     "installBehavior": {
         "archiveExtractionMethod": "tar"
@@ -19,5 +22,8 @@
         "disable": true
     },
     "experimentalFeatures": {
+        "fonts": true,
+        "listDetails": true,
+        "sourceEdit": true
     }
 }
