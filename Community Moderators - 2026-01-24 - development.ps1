@@ -1,4 +1,4 @@
-# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-01-23 - development.ps1"
+# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-01-24 - development.ps1"
 # in PowerShell 5.1 or later.
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -158,6 +158,7 @@ function Set-GitSettings {
         git config --global checkout.workers 0
         git config --global fetch.parallel 0
         git config --global core.quotePath false
+        git config --global core.longPaths true
         git config --global user.name $env:COMPUTERNAME
         git config --global user.email "$env:COMPUTERNAME.internal"
         New-Item -Path $env:TEMP\$env:COMPUTERNAME.internal -ItemType File
