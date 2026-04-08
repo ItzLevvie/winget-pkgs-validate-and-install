@@ -1,4 +1,4 @@
-# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-01-24 - development.ps1"
+# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-04-08 - development.ps1"
 # in PowerShell 5.1 or later.
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -172,7 +172,7 @@ function Initialize-Repository {
     if (-not($REPOSITORY_DIRECTORY_GIT_FOLDER)) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global safe.directory $REPOSITORY_DIRECTORY.Replace("\", "/")
-        git clone --no-checkout --sparse --branch master --shallow-since=2025-12-01 --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git clone --no-checkout --sparse --branch master --shallow-since=2026-03-01 --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         Write-Host
     }
