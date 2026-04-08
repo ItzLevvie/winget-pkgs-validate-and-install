@@ -1,4 +1,4 @@
-# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-01-24 - development.ps1"
+# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-04-08 - development.ps1"
 # in PowerShell 5.1 or later.
 
 $ErrorActionPreference = "SilentlyContinue"
