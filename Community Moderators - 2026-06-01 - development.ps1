@@ -1,4 +1,4 @@
-# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-04-08 - development.ps1"
+# This script requires you to run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine -Force ; & ".\Community Moderators - 2026-06-01 - development.ps1"
 # in PowerShell 5.1 or later.
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -71,20 +71,20 @@ function Set-WindowsSettings {
 function Initialize-WinGet {
     [System.Boolean]$WINGET_COMMAND = Test-Path -Path $env:LOCALAPPDATA\Microsoft\WindowsApps\winget.exe -PathType Leaf
     [System.Version]$WINGET_VERSION_CURRENT = (winget --version).TrimStart("v").TrimEnd("-preview")
-    [System.Version]$WINGET_VERSION_MINIMUM = "1.28.90"
+    [System.Version]$WINGET_VERSION_MINIMUM = "1.28.240"
     if (-not($WINGET_COMMAND) -or $WINGET_VERSION_CURRENT -lt $WINGET_VERSION_MINIMUM) {
         Write-Host "Downloading WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.WindowsAppRuntime.1.8_x64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.8_x64_8wekyb3d8bbwe.msix
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.WindowsAppRuntime.1.8_x64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.8_x64_8wekyb3d8bbwe.msix
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_x64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_x64_8wekyb3d8bbwe.appx
         }
         elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.WindowsAppRuntime.1.8_arm64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.8_arm64_8wekyb3d8bbwe.msix
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.WindowsAppRuntime.1.8_arm64_8wekyb3d8bbwe.msix -OutFile $env:TEMP\Microsoft.WindowsAppRuntime.1.8_arm64_8wekyb3d8bbwe.msix
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00.UWPDesktop_arm64_8wekyb3d8bbwe.appx
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx -OutFile $env:TEMP\Microsoft.VCLibs.140.00_arm64_8wekyb3d8bbwe.appx
         }
-        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle -OutFile $env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         Write-Host "Installing WinGet..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
             Add-AppxPackage -Path $env:TEMP\Microsoft.WindowsAppRuntime.1.8_x64_8wekyb3d8bbwe.msix -DeferRegistrationWhenPackagesAreInUse
@@ -108,7 +108,7 @@ function Set-WinGetSettings {
     [System.String]$SID_REQUIRED = "S-1-5-32-544"
     if (-not($WINGET_SETTINGS)) {
         if ($SID_CURRENT -eq $SID_REQUIRED) {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/settings.json -OutFile $env:LOCALAPPDATA\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json
             winget settings --enable LocalManifestFiles
             winget settings --enable BypassCertificatePinningForMicrosoftStore
             winget settings --enable InstallerHashOverride
@@ -132,14 +132,14 @@ function Initialize-Git {
     [System.Boolean]$GIT_COMMAND = Test-Path -Path $env:ProgramFiles\Git\cmd\git.exe -PathType Leaf
     [System.String]$GIT_VERSION_COMMAND = git version
     [System.Version]$GIT_VERSION_CURRENT = $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[0] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[1] + "." + $GIT_VERSION_COMMAND.TrimStart("git version").Split(".")[2]
-    [System.Version]$GIT_VERSION_MINIMUM = "2.51.0"
+    [System.Version]$GIT_VERSION_MINIMUM = "2.54.0"
     if (-not($GIT_COMMAND) -or $GIT_VERSION_CURRENT -lt $GIT_VERSION_MINIMUM) {
         Write-Host "Downloading Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Git-64-bit.exe -OutFile $env:TEMP\Git-64-bit.exe
         }
         elseif ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
-            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260123.1/Git-arm64.exe -OutFile $env:TEMP\Git-arm64.exe
+            Invoke-WebRequest -Uri https://github.com/ItzLevvie/winget-pkgs-validate-and-install/releases/download/20260601.1/Git-arm64.exe -OutFile $env:TEMP\Git-arm64.exe
         }
         Write-Host "Installing Git..."
         if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") {
@@ -172,7 +172,7 @@ function Initialize-Repository {
     if (-not($REPOSITORY_DIRECTORY_GIT_FOLDER)) {
         Write-Host "Cloning the WinGet package repository..."
         git config --global safe.directory $REPOSITORY_DIRECTORY.Replace("\", "/")
-        git clone --no-checkout --sparse --branch master --shallow-since=2026-03-01 --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
+        git clone --no-checkout --sparse --branch master --shallow-since=2026-04-01 --single-branch --no-tags https://github.com/microsoft/winget-pkgs $REPOSITORY_DIRECTORY
         git -C $REPOSITORY_DIRECTORY remote add upstream https://github.com/microsoft/winget-pkgs
         Write-Host
     }
